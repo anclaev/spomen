@@ -1,0 +1,47 @@
+services:
+  db:
+    image: mongo:latest
+    container_name: spomen-db
+    entrypoint:
+      [
+        "/usr/bin/mongod",
+        "--bind_ip_all",
+        "--replSet",
+        "spomen-db"
+      ]
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - /home/av/projects/spomen/data/db:/data/db
+      - /home/av/projects/spomen/scripts/rs-init.sh:/scripts/rs-init.sh
+    networks:
+      - net
+
+  api:
+    container_name: spomen-api
+    image: anclaev/spomen-api:latest
+    restart: always
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - PORT=${API_PORT}
+      - VIRTUAL_PORT=${API_PORT}
+      - VIRTUAL_HOST=${API_HOST}
+      - LETSENCRYPT_HOST=${API_HOST}
+      - ORIGIN=${API_HOST}
+    networks:
+      - net
+      - proxy_net
+
+networks:
+  net:
+    driver: bridge
+
+  proxy_net:
+    external: true
+
+volumes:
+  data: {}
