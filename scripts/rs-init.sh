@@ -20,8 +20,8 @@ use admin;
 
 db.createUser(
   {
-    user: '$MONGO_ROOT_USER',
-    pwd: '$MONGO_ROOT_PASSWORD',
+    user: '$DATABASE_USER',
+    pwd: '$DATABASE_PWD',
     roles: [{ role: 'clusterAdmin', db: 'admin' }],
   },
 );
