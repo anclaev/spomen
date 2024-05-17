@@ -36,6 +36,24 @@ services:
       - net
       - proxy_net
 
+  client:
+    container_name: spomen-client
+    image: anclaev/spomen-client:latest
+    restart: always
+    depends_on:
+      - api
+    env_file:
+      - .env
+    environment:
+      - PORT=${WEB_PORT}
+      - VIRTUAL_PORT=${WEB_PORT}
+      - VIRTUAL_HOST=${WEB_HOST}
+      - LETSENCRYPT_HOST=${WEB_HOST}
+      - ORIGIN=${WEB_HOST}
+    networks:
+      - net
+      - proxy_net
+
 networks:
   net:
     driver: bridge
