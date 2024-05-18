@@ -20,7 +20,7 @@ services:
 
   api:
     container_name: spomen-api
-    image: anclaev/spomen-api:latest
+    image: anclaev/spomen-api:${VERSION}
     restart: always
     depends_on:
       - db
@@ -38,7 +38,7 @@ services:
 
   client:
     container_name: spomen-client
-    image: anclaev/spomen-client:latest
+    image: anclaev/spomen-client:${VERSION}
     restart: always
     depends_on:
       - api

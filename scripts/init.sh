@@ -1,5 +1,5 @@
 #!/bin/bash
-
+export VERSION=$1
 docker compose up -d
 
 sleep 5
