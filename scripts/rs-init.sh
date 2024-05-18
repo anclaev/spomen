@@ -2,12 +2,12 @@
 
 mongosh  <<EOF
 var config = {
-    "_id": "spomen-db",
+    "_id": "$1",
     "version": 1,
     "members": [
         {
             "_id": 1,
-            "host": "spomen-db:27017",
+            "host": "$1:27017",
             "priority": 3
         },
     ]
