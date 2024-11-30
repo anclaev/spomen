@@ -17,9 +17,7 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@ormar/common": ["libs/common/src/index.ts"],
-      "@ormar/config": ["libs/config/src/index.ts"],
-      "@ormar/kafka": ["libs/kafka/src/index.ts"]
+      "@spomen/core": ["libs/core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

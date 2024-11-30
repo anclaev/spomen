@@ -36,9 +36,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": [
-        "apps/**/*",
-      ]
+      "exclude": ["apps/**/*", "apps/account-e2e/**/*"]
     }
   ],
   "targetDefaults": {
@@ -46,6 +44,11 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    }
+  },
+  "release": {
+    "version": {
+      "preVersionCommand": "yarn nx run-many -t build"
     }
   }
 }

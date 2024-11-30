@@ -3,7 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - develop
+      - 'develop'
+  pull_request:
+    branches:
+      - 'develop'
 
 permissions:
   actions: read
@@ -14,8 +17,29 @@ env:
 
 jobs:
   build:
-    name: 'Сборка образов'
+    name: 'Сборка сервисов'
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          cache: yarn
+
+      - name: 'Установка зависимостей'
+        run: yarn --frozen-lockfile --ignore-scripts
+
+      - uses: nrwl/nx-set-shas@v3
+
+      - name: 'Сборка сервисов'
+        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
+
+#  build:
+#    name: 'Сборка образов'
+#    runs-on: ubuntu-latest
 #    steps:
 #      - uses: actions/checkout@v4
 #        with:
