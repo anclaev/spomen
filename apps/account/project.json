@@ -97,6 +97,38 @@
       "options": {
         "schema": "apps/account/schema.prisma"
       }
+    },
+    "container": {
+      "executor": "@nx-tools/nx-container:build",
+      "defaultConfiguration": "local",
+      "dependsOn": ["build"],
+      "options": {
+        "load": true,
+        "engine": "docker",
+        "build-args": ["NODE_ENV=local"]
+      },
+      "configurations": {
+        "local": {
+          "push": false,
+          "load": true,
+          "build-args": ["NODE_ENV=local"],
+          "tags": ["anclaev/spomen-account:local"]
+        },
+        "staging": {
+          "push": true,
+          "cache-from": ["type=gha"],
+          "cache-to": ["type=gha,mode=max"],
+          "build-args": ["NODE_ENV=staging"],
+          "tags": ["anclaev/spomen-account:staging"]
+        },
+        "production": {
+          "push": true,
+          "cache-from": ["type=gha"],
+          "cache-to": ["type=gha,mode=max"],
+          "build-args": ["NODE_ENV=production"],
+          "tags": ["anclaev/spomen-account:latest"]
+        }
+      }
     }
   }
 }

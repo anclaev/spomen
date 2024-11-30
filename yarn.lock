@@ -1866,7 +1866,7 @@
     ci-info "^4.0.0"
     properties-file "^3.5.4"
 
-"@nx-tools/container-metadata@6.1.1":
+"@nx-tools/container-metadata@6.1.1", "@nx-tools/container-metadata@^6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@nx-tools/container-metadata/-/container-metadata-6.1.1.tgz#121c5cd09e9352772edb0e9b87df6c3873f646ec"
   integrity sha512-8jIf+zOwPSFog3wrWCLvQ3L0cUZ47ZX2lpbJmkY97cOCPyX/2gIOL/jQ58+ksphd+F0XkIMiXivzjpN6wkwTng==
