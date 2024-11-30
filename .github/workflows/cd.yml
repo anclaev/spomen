@@ -39,7 +39,7 @@ jobs:
     name: 'Сборка сервисов'
     runs-on: ubuntu-latest
     env:
-      ENVIRONMENT: ${{ contains(github.ref, 'staging') && 'staging' | 'production' }}
+      ENVIRONMENT: ${{ contains(github.ref, 'staging') && 'staging' || 'production' }}
     steps:
       - uses: actions/checkout@v4
         with:
