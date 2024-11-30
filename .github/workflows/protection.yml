@@ -1,0 +1,24 @@
+name: PR protection
+
+on:
+  pull_request:
+    branches:
+      - main
+      - staging
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch
+        run: |
+          if [[ ${GITHUB_BASE_REF} == main ]] && ${GITHUB_HEAD_REF} != staging ]];
+          then
+            echo "Error: Pull request must come from 'staging' branch"
+            exit 1
+          fi
+          if [[ ${GITHUB_BASE_REF} == staging ]] && ${GITHUB_HEAD_REF} != develop ]];
+          then
+            echo "Error: Pull request must come from 'develop' branch"
+            exit 1
+          fi
