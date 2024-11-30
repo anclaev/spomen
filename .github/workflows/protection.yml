@@ -9,7 +9,7 @@ on:
 jobs:
   check-branch-main:
     runs-on: ubuntu-latest
-    if: contains($GITHUB_BASE_REF, 'main')
+    if: contains(github.head_ref, 'main')
     env:
       ACCEPTED: ${{ contains(github.ref, 'staging') }}
     steps:
@@ -23,7 +23,7 @@ jobs:
 
   check-branch-staging:
     runs-on: ubuntu-latest
-    if: contains($GITHUB_REF, 'staging')
+    if: contains(github.head_ref, 'staging')
     env:
       ACCEPTED: ${{ contains(github.ref, 'develop') }}
     steps:
