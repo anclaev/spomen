@@ -1,8 +1,8 @@
 {
-  "name": "account-e2e",
+  "name": "@spomen/account-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "implicitDependencies": ["account"],
+  "implicitDependencies": ["@spomen/account"],
   "targets": {
     "e2e": {
       "executor": "@nx/jest:jest",
