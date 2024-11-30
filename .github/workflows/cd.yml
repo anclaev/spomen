@@ -36,7 +36,6 @@ jobs:
 #        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint --parallel=3
 
   build:
-    name: 'Сборка сервисов'
     runs-on: ubuntu-latest
     env:
       ENVIRONMENT: ${{ contains(github.ref, 'staging') && 'staging' || 'production' }}
