@@ -1,0 +1,36 @@
+name: PR protection
+
+on:
+  pull_request:
+    branches:
+      - main
+      - staging
+
+jobs:
+  check-branch-main:
+    runs-on: ubuntu-latest
+    if: contains($GITHUB_BASE_REF, 'main')
+    env:
+      ACCEPTED: ${{ contains(github.ref, 'staging') }}
+    steps:
+      - name: Check branch
+        run: |
+          if [[ !${ACCEPTED} ]];
+          then
+            echo "Error: Pull request must come from 'staging' branch"
+            exit 1
+          fi
+
+  check-branch-staging:
+    runs-on: ubuntu-latest
+    if: contains($GITHUB_REF, 'staging')
+    env:
+      ACCEPTED: ${{ contains(github.ref, 'develop') }}
+    steps:
+      - name: Check branch
+        run: |
+          if [[ !${ACCEPTED} ]];
+          then
+            echo "Error: Pull request must come from 'develop' branch"
+            exit 1
+          fi
