@@ -1,0 +1,30 @@
+{
+  "name": "account",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/account/src",
+  "authors": ["Artem Samarin <iahugo@yandex.ru> (https://t.me/anclaev)"],
+  "copyright": "anclaev",
+  "description": "Account service of Spomen",
+  "title": "@spomen/account",
+  "projectType": "application",
+  "tags": ["account"],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "account:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "account:build:development"
+        },
+        "production": {
+          "buildTarget": "account:build:production"
+        }
+      }
+    }
+  }
+}
