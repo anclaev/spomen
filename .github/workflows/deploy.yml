@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ENVIRONMENT: ${{ contains(github.ref, 'staging') && 'staging' || 'production' }}
+      NX_BASE: ${{ github.event.base_ref }}
+      NX_HEAD: ${{ github.event.before }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,7 +43,6 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - uses: nrwl/nx-set-shas@v3
       - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=container --configuration=$ENVIRONMENT --parallel=3
 
 #  deploy:

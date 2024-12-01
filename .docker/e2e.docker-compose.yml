@@ -1,0 +1,47 @@
+services:
+  db-account:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres-db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "1701:5432"
+    volumes:
+      - db-account-data:/var/lib/postgresql/data/pgdata
+    networks:
+      - testing-network
+
+  service-account:
+    image: anclaev/spomen-account:${VERSION}
+    restart: always
+    depends_on:
+      - db-account
+    environment:
+      DB_HOST: db-account
+      DB_PORT: 1701
+    networks:
+      - testing-network
+
+  service-a:
+    image: <your-docker-repo-name>/service-a
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - 8888:8888
+    networks:
+      - testing-network
+    environment:
+      SERVICE_D_HOST=service-d
+      SERVICE_D_PORT=8080
+      DB_HOST = service-a-db
+      DB_PORT = 27017
+
+networks:
+  testing-network:
+
+volumes:
+  db-account-data:
+    driver: local
