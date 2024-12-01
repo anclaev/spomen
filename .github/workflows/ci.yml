@@ -46,7 +46,7 @@ jobs:
 
       - uses: nrwl/nx-set-shas@v3
 
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
 
       - uses: actions/upload-artifact@master
         with:
@@ -88,7 +88,7 @@ jobs:
         path: dist
 
     - uses: nrwl/nx-set-shas@v3
-    - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3
+    - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3
       env:
         DB_HOST: postgres
         DB_PORT: 5432
@@ -124,7 +124,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} nx affected --base=$NX_BASE --head=$NX_HEAD --target=container --parallel=3
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=container --parallel=3
 #
 #  deploy:
 #    name: 'Деплой сервисов'
