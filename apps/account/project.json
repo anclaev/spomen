@@ -112,7 +112,7 @@
           "push": false,
           "load": true,
           "build-args": ["NODE_ENV=local"],
-          "tags": ["anclaev/spomen-account:local"]
+          "tags": ["anclaev/spomen-account:dev"]
         },
         "staging": {
           "push": true,
