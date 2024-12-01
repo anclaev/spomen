@@ -21,6 +21,9 @@
         "development": {
           "buildTarget": "@spomen/account:build:development"
         },
+        "staging": {
+          "buildTarget": "@spomen/account:build:staging"
+        },
         "production": {
           "buildTarget": "@spomen/account:build:production"
         }
