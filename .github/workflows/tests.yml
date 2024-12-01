@@ -96,6 +96,8 @@ jobs:
           DB_PORT: 5432
 
       - run: yarn
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - uses: nrwl/nx-set-shas@v4
 
