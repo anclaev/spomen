@@ -34,6 +34,9 @@ jobs:
       - run: yarn --frozen-lockfile --ignore-scripts
 
       - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=build --parallel=3
+        env:
+          NX_BASE: ${{ github.event.base_ref }}
+          NX_HEAD: ${{ github.event.before }}
 
       - name: Login to DockerHub
         uses: docker/login-action@v2
