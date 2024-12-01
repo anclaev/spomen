@@ -90,7 +90,7 @@ jobs:
 
       - run: yarn set version berry
 
-      - run: yarn dlx nx-cloud start-ci-run --distribute-on="1 linux-medium-js" --stop-agents-after="e2e-ci"
+      - run: yarn dlx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
         env:
           DB_HOST: postgres
           DB_PORT: 5432
