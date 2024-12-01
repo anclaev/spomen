@@ -67,6 +67,7 @@ jobs:
 
   tests-e2e:
     runs-on: ubuntu-latest
+    needs: [tests-prepare]
     services:
       postrges:
         image: postgres
