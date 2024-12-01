@@ -95,7 +95,7 @@ jobs:
           DB_HOST: postgres
           DB_PORT: 5432
 
-      - run: yarn --frozen-lockfile --ignore-scripts
+      - run: yarn install --frozen-lockfile --ignore-scripts
 
       - uses: nrwl/nx-set-shas@v4
 
