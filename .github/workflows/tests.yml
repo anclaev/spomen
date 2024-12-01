@@ -100,6 +100,5 @@ jobs:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - uses: nrwl/nx-set-shas@v4
-
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD -t e2e-ci
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=e2e-ci
 
