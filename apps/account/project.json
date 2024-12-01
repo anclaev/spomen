@@ -110,7 +110,7 @@
         "build-args": ["NODE_ENV=local"]
       },
       "configurations": {
-        "local": {
+        "dev": {
           "push": false,
           "load": true,
           "build-args": ["NODE_ENV=local"],
