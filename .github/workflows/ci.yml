@@ -56,7 +56,7 @@ jobs:
       - uses: nrwl/nx-set-shas@v3
 
       - name: 'Сборка сервисов'
-        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
+        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
 
       - uses: actions/upload-artifact@master
         with:
