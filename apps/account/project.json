@@ -5,7 +5,6 @@
   "authors": ["Artem Samarin <iahugo@yandex.ru> (https://t.me/anclaev)"],
   "copyright": "anclaev",
   "description": "Account service of Spomen",
-  "title": "@spomen/account",
   "projectType": "application",
   "tags": ["account"],
   "targets": {
