@@ -101,5 +101,5 @@ jobs:
 
       - uses: nrwl/nx-set-shas@v4
 
-      - run: yarn exec nx affected -t e2e-ci
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD -t e2e-ci
 
