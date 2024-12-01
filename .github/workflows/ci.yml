@@ -30,10 +30,10 @@ jobs:
       - name: 'Установка зависимостей'
         run: yarn --frozen-lockfile --ignore-scripts
 
-      - uses: actions/upload-artifact@master
-        with:
-          name: node_modules
-          path: node_modules
+#      - uses: actions/upload-artifact@master
+#        with:
+#          name: node_modules
+#          path: node_modules
 
   ci-build:
     runs-on: ubuntu-latest
@@ -48,15 +48,15 @@ jobs:
           node-version: 'latest'
           cache: yarn
 
-      - uses: actions/download-artifact@master
-        with:
-          name: node_modules
-          path: node_modules
+#      - uses: actions/download-artifact@master
+#        with:
+#          name: node_modules
+#          path: node_modules
 
       - uses: nrwl/nx-set-shas@v3
 
       - name: 'Сборка сервисов'
-        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
+        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
 
       - uses: actions/upload-artifact@master
         with:
@@ -90,10 +90,10 @@ jobs:
         node-version: 'latest'
         cache: yarn
 
-    - uses: actions/download-artifact@master
-      with:
-        name: node_modules
-        path: node_modules
+#    - uses: actions/download-artifact@master
+#      with:
+#        name: node_modules
+#        path: node_modules
 
     - uses: actions/download-artifact@master
       with:
@@ -102,7 +102,10 @@ jobs:
 
     - uses: nrwl/nx-set-shas@v3
     - name: 'Тестирование модулей'
-      run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3
+      run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3
+      env:
+        DB_HOST: postgres
+        DB_PORT: 5432
 
   ci-build-images:
     runs-on: ubuntu-latest
@@ -117,10 +120,10 @@ jobs:
           node-version: 'latest'
           cache: yarn
 
-      - uses: actions/download-artifact@master
-        with:
-          name: node_modules
-          path: node_modules
+#      - uses: actions/download-artifact@master
+#        with:
+#          name: node_modules
+#          path: node_modules
 
       - uses: actions/download-artifact@master
         with:
@@ -140,7 +143,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: 'Build images'
-        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=container --parallel=3
+        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} nx affected --base=$NX_BASE --head=$NX_HEAD --target=container --parallel=3
 #
 #  deploy:
 #    name: 'Деплой сервисов'
