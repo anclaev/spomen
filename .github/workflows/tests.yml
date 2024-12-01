@@ -1,0 +1,101 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - 'develop'
+  pull_request:
+    branches:
+      - 'main'
+
+permissions:
+  actions: read
+  contents: read
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+
+jobs:
+  tests-prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          cache: yarn
+
+      - run: yarn --frozen-lockfile --ignore-scripts
+
+  tests:
+    runs-on: ubuntu-latest
+    needs: [tests-prepare]
+
+    services:
+      postrges:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_BD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          cache: yarn
+
+      - run: yarn --frozen-lockfile --ignore-scripts
+
+      - uses: nrwl/nx-set-shas@v3
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=build,test --parallel=3
+        env:
+          DB_HOST: postgres
+          DB_PORT: 5432
+
+  tests-e2e:
+    runs-on: ubuntu-latest
+    needs: [tests-prepare]
+    services:
+      postrges:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_BD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          cache: yarn
+
+      - run: yarn dlx nx-cloud start-ci-run --distribute-on="1 linux-medium-js" --stop-agents-after="e2e-ci"
+        env:
+          DB_HOST: postgres
+          DB_PORT: 5432
+
+      - run: yarn --frozen-lockfile --ignore-scripts
+
+      - uses: nrwl/nx-set-shas@v4
+
+      - run: yarn exec nx affected -t e2e-ci
+

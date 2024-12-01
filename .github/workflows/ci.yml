@@ -3,8 +3,6 @@ name: CI
 on:
   push:
     branches:
-      - 'main'
-      - 'staging'
       - 'develop'
 
 permissions:
@@ -15,7 +13,7 @@ env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
 jobs:
-  build:
+  ci-prepare:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,59 +25,61 @@ jobs:
           node-version: 'latest'
           cache: yarn
 
-      - name: 'Установка зависимостей'
-        run: yarn --frozen-lockfile --ignore-scripts
+      - run: yarn --frozen-lockfile --ignore-scripts
+
+  ci-build:
+    runs-on: ubuntu-latest
+    needs: [ci-prepare]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          cache: yarn
+
+      - run: yarn --frozen-lockfile --ignore-scripts
 
       - uses: nrwl/nx-set-shas@v3
 
-      - name: 'Сборка сервисов'
-        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
 
-#  build:
-#    name: 'Сборка образов'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#        with:
-#          fetch-depth: 0
-#
-#      - uses: actions/setup-node@v4
-#        with:
-#          node-version: 'latest'
-#          cache: yarn
-#
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v2
-#
-#      - name: 'Install dependencies'
-#        run: yarn --frozen-lockfile --ignore-scripts
-#
-#      - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
-#        uses: nrwl/nx-set-shas@v3
-#
-#      - name: Login to DockerHub
-#        uses: docker/login-action@v2
-#        with:
-#          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-#          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-#
-#      - name: 'Build images'
-#        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=origin/master --head=$NX_HEAD --target=container --parallel=2
-#        env:
-#          NX_BASE: origin/master
-#
-#  deploy:
-#    name: 'Деплой сервисов'
-#    needs: [build]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: appleboy/ssh-action@v1.2.0
-#        with:
-#          host: ${{ secrets.SSH_IP }}
-#          username: ${{ secrets.SSH_USER }}
-#          key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          port: ${{ secrets.SSH_PORT }}
-#          passphrase: ${{ secrets.SSH_PASSPHRASE }}
-#          script: |
-#            cd ${{ secrets.SSH_PATH }}
-#            sudo ./dev.sh dev
+      - uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: dist
+
+  ci-publish:
+    runs-on: ubuntu-latest
+    needs: [ci-build]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          cache: yarn
+
+      - run: yarn --frozen-lockfile --ignore-scripts
+
+      - uses: actions/download-artifact@master
+        with:
+          name: dist
+          path: dist
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - uses: nrwl/nx-set-shas@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=container --parallel=3

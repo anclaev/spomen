@@ -14,15 +14,18 @@
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "account:build",
+        "buildTarget": "@spomen/account:build",
         "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
-          "buildTarget": "account:build:development"
+          "buildTarget": "@spomen/account:build:development"
+        },
+        "staging": {
+          "buildTarget": "@spomen/account:build:staging"
         },
         "production": {
-          "buildTarget": "account:build:production"
+          "buildTarget": "@spomen/account:build:production"
         }
       }
     },
@@ -112,7 +115,7 @@
           "push": false,
           "load": true,
           "build-args": ["NODE_ENV=local"],
-          "tags": ["anclaev/spomen-account:local"]
+          "tags": ["anclaev/spomen-account:dev"]
         },
         "staging": {
           "push": true,
