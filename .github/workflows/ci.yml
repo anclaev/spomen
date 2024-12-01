@@ -13,47 +13,8 @@ env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
 jobs:
-  ci-prepare:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 'latest'
-          cache: yarn
-
-      - run: yarn --frozen-lockfile --ignore-scripts
-
-  ci-build:
-    runs-on: ubuntu-latest
-    needs: [ci-prepare]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 'latest'
-          cache: yarn
-
-      - run: yarn --frozen-lockfile --ignore-scripts
-
-      - uses: nrwl/nx-set-shas@v3
-
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
-
-      - uses: actions/upload-artifact@master
-        with:
-          name: dist
-          path: dist
-
   ci-publish:
     runs-on: ubuntu-latest
-    needs: [ci-build]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,11 +26,6 @@ jobs:
           cache: yarn
 
       - run: yarn --frozen-lockfile --ignore-scripts
-
-      - uses: actions/download-artifact@master
-        with:
-          name: dist
-          path: dist
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
