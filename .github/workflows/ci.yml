@@ -15,7 +15,7 @@ env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
 jobs:
-  build:
+  ci-prepare:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,43 +30,114 @@ jobs:
       - name: 'Установка зависимостей'
         run: yarn --frozen-lockfile --ignore-scripts
 
+      - uses: actions/upload-artifact@master
+        with:
+          name: node_modules
+          path: node_modules
+
+  ci-build:
+    runs-on: ubuntu-latest
+    needs: [ci-prepare]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          cache: yarn
+
+      - uses: actions/download-artifact@master
+        with:
+          name: node_modules
+          path: node_modules
+
       - uses: nrwl/nx-set-shas@v3
 
       - name: 'Сборка сервисов'
         run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint,build --parallel=3
 
-#  build:
-#    name: 'Сборка образов'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#        with:
-#          fetch-depth: 0
-#
-#      - uses: actions/setup-node@v4
-#        with:
-#          node-version: 'latest'
-#          cache: yarn
-#
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v2
-#
-#      - name: 'Install dependencies'
-#        run: yarn --frozen-lockfile --ignore-scripts
-#
-#      - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
-#        uses: nrwl/nx-set-shas@v3
-#
-#      - name: Login to DockerHub
-#        uses: docker/login-action@v2
-#        with:
-#          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-#          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-#
-#      - name: 'Build images'
-#        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=origin/master --head=$NX_HEAD --target=container --parallel=2
-#        env:
-#          NX_BASE: origin/master
+      - uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: dist
+
+  ci-test:
+    runs-on: ubuntu-latest
+    needs: [ci-build]
+
+    services:
+      image: postgres
+      env:
+        - POSTGRES_USER: postgres
+        - POSTGRES_PASSWORD: postgres
+        - POSTGRES_BD: postgres
+      ports:
+        - 5432:5432
+      options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5 --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 'latest'
+        cache: yarn
+
+    - uses: actions/download-artifact@master
+      with:
+        name: node_modules
+        path: node_modules
+
+    - uses: actions/download-artifact@master
+      with:
+        name: dist
+        path: dist
+
+    - uses: nrwl/nx-set-shas@v3
+    - name: 'Тестирование модулей'
+      run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3
+
+  ci-build-images:
+    runs-on: ubuntu-latest
+    needs: [ci-test]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          cache: yarn
+
+      - uses: actions/download-artifact@master
+        with:
+          name: node_modules
+          path: node_modules
+
+      - uses: actions/download-artifact@master
+        with:
+          name: dist
+          path: dist
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: 'Установка SHAs'
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: 'Build images'
+        run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=container --parallel=3
 #
 #  deploy:
 #    name: 'Деплой сервисов'

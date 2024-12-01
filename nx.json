@@ -2,7 +2,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "defaultBase": "main",
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "default": ["{projectRoot}/**/*", "sharedGlobals", "{workspaceRoot}/e2e/**/*"],
     "production": [
       "default",
       "!{projectRoot}/.eslintrc.json",
@@ -33,10 +33,18 @@
     },
     {
       "plugin": "@nx/jest/plugin",
+      "exclude": ["e2e/**/*"],
       "options": {
         "targetName": "test"
-      },
-      "exclude": ["apps/**/*", "apps/account-e2e/**/*"]
+      }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "include": ["e2e/**/*"],
+      "options": {
+        "targetName": "e2e-local",
+        "ciTargetName": "e2e-ci"
+      }
     }
   ],
   "targetDefaults": {

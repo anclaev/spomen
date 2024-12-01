@@ -14,15 +14,15 @@
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "account:build",
+        "buildTarget": "@spomen/account:build",
         "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
-          "buildTarget": "account:build:development"
+          "buildTarget": "@spomen/account:build:development"
         },
         "production": {
-          "buildTarget": "account:build:production"
+          "buildTarget": "@spomen/account:build:production"
         }
       }
     },
