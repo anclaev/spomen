@@ -39,10 +39,10 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
+# TODO: Исправить base и head
+      - uses: nrwl/nx-set-shas@v4
       - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=build,container --configuration=$ENVIRONMENT --parallel=3
-        env:
-          NX_BASE: ${{ github.ref }}
-          NX_HEAD: ${{ github.event.before }}
+
 #  deploy:
 #    name: 'Деплой сервисов'
 #    needs: [build]

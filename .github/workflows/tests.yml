@@ -88,12 +88,16 @@ jobs:
           node-version: 'latest'
           cache: yarn
 
-      - run: yarn dlx nx-cloud start-ci-run --distribute-on="1 linux-medium-js" --stop-agents-after="e2e-ci"
+      - run: yarn set version berry
+
+      - run: yarn dlx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
         env:
           DB_HOST: postgres
           DB_PORT: 5432
 
-      - run: yarn --frozen-lockfile --ignore-scripts
+      - run: yarn
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - uses: nrwl/nx-set-shas@v4
 
