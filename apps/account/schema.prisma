@@ -7,8 +7,57 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum AccountRole {
+  PUBLIC
+  ADMIN
+}
+
+enum AccountStatus {
+  CREATED
+  PENDING
+  CONFIRMED
+  LOCKED
+  MARKED
+  REMOVED
+}
+
+enum SessionStatus {
+  ACTIVE
+  EXPIRED
+}
+
 model Account {
-  id    String     @id @default(uuid())
-  email String  @unique
+  id       String        @id @default(uuid())
+  login    String?       @unique
+  email    String        @unique
   password String
+  passkey  String?
+  status   AccountStatus @default(CREATED)
+  roles    AccountRole[] @default([PUBLIC])
+  meta     Json?         @db.Json
+
+  first_name String?
+  last_name  String?
+  birthday   DateTime? @db.Date
+  sex        Int      @default(0)
+
+  sessions Session[] @relation("SessionOwner")
+
+  created_at DateTime @default(now())
+
+  @@map("accounts")
+}
+
+model Session {
+  id            String        @id @default(uuid())
+  refresh_token String
+  status        SessionStatus @default(ACTIVE)
+
+  owner    Account @relation("SessionOwner", fields: [owner_id], references: [id])
+  owner_id String
+
+  created_at DateTime @default(now()) @db.Date
+  expire_at  DateTime @db.Date
+
+  @@map("sessions")
 }

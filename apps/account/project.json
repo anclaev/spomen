@@ -11,7 +11,7 @@
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "dependsOn": ["build"],
+      "dependsOn": ["prisma-generate","build"],
       "options": {
         "buildTarget": "@spomen/account:build",
         "runBuildTargetDependencies": false

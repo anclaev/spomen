@@ -9,15 +9,7 @@ export class PrismaProvider extends PrismaClient implements OnModuleInit {
   logger: Logger
 
   constructor() {
-    super({
-      log: [
-        { emit: 'event', level: 'query' },
-        { emit: 'event', level: 'info' },
-        { emit: 'event', level: 'warn' },
-        { emit: 'stdout', level: 'error' },
-      ],
-    })
-
+    super()
     this.logger = createConsoleLogger({ service: 'Prisma', label: 'App' })
   }
 
@@ -27,6 +19,27 @@ export class PrismaProvider extends PrismaClient implements OnModuleInit {
         message: 'Подключение к базе данных установлено!',
         level: 'info',
       })
+    })
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    this.$on('error', () => {
+      return
+    })
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    this.$on('warn', () => {
+      return
+    })
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    this.$on('info', () => {
+      return
+    })
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    this.$on('query', () => {
+      return
     })
   }
 

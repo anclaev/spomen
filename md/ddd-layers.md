@@ -18,7 +18,7 @@
 
 ### Infrastructure
 
-- Реализация р*еп*озитория
+- Реализация репозитория
 - Доступ к Prisma
 - Используемое из Application layer:
   - Logging, crypto, ...
