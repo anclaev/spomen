@@ -5,7 +5,10 @@ FROM docker.io/node:$NODE_VERSION AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY dist/apps/account/package*.json ./
+COPY apps/account/schema.prisma ./
 RUN npm install --omit=dev
+RUN npm install --dev prisma
+RUN prisma generate
 
 # Production image, copy all the files and run nest
 FROM docker.io/node:$NODE_VERSION AS runner
