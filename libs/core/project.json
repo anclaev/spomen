@@ -16,6 +16,7 @@
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
+      "dependsOn": ["prisma-generate"],
       "options": {
         "outputPath": "dist/libs/core",
         "tsConfig": "libs/core/tsconfig.lib.json",
