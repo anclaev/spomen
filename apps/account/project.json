@@ -103,7 +103,7 @@
     "container": {
       "executor": "@nx-tools/nx-container:build",
       "defaultConfiguration": "local",
-      "dependsOn": ["build"],
+      "dependsOn": ["prisma-generate","build"],
       "options": {
         "load": true,
         "engine": "docker",

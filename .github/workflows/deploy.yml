@@ -16,6 +16,7 @@ env:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip deploy]')"
     env:
       ENVIRONMENT: ${{ contains(github.ref, 'staging') && 'staging' || 'production' }}
     steps:
@@ -39,9 +40,8 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-# TODO: Исправить base и head
       - uses: nrwl/nx-set-shas@v4
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=build,container --configuration=$ENVIRONMENT --parallel=3
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=container --configuration=$ENVIRONMENT --parallel=3
 
 #  deploy:
 #    name: 'Деплой сервисов'
