@@ -60,12 +60,33 @@ jobs:
       - run: yarn --frozen-lockfile --ignore-scripts
 
       - uses: nrwl/nx-set-shas@v3
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=build,test --parallel=3
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=build, test --parallel=3 --coverage --coverageReporters=json,json-summary
         env:
+          DATABASE_URL: postgresql://postgres:postgres@posgtres:5432/postgres
           DB_HOST: postgres
           DB_PORT: 5432
 
-# TODO: Доработать e2e
+      - uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: ./coverage/**/coverage-summary.json
+          if-no-files-found: error
+
+      - uses: dkhunt27/nx-code-coverage@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          no-coverage-ran: false
+          coverage-folder: ./coverage
+          coverage-base-folder: ./coverage-base
+          gist-processing: true
+          gist-token: ${{ secrets.COVERAGE_BADGES_GIST_TOKEN }}
+          gist-id: d7e6b443a01eba615fd2a7c1215aec91
+          color: green
+          named-logo: jest
+          hide-coverage-reports: false
+          hide-unchanged: false
+
+# TODO: Пофиксить e2e
 
 #  tests-e2e:
 #    runs-on: ubuntu-latest

@@ -2,6 +2,12 @@
   "name": "@spomen/core",
   "version": "0.0.1",
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "@nestjs/common": "^10.0.2",
+    "@nestjs/config": "^3.3.0",
+    "zod": "^3.23.8",
+    "@prisma/client": "^6.0.0",
+    "winston": "^3.17.0",
+    "nest-winston": "^1.9.7"
   }
 }
