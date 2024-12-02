@@ -45,7 +45,7 @@
       "include": ["e2e/**/*"],
       "options": {
         "targetName": "e2e-local",
-        "ciTargetName": "e2e-ci",
+        "ciTargetName": "e2e-ci"
       }
     }
   ],
@@ -53,7 +53,7 @@
     "@nx/js:tsc": {
       "cache": true,
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"],
+      "inputs": ["production", "^production"]
     }
   },
   "release": {
