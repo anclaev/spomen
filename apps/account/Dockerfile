@@ -8,7 +8,7 @@ COPY dist/apps/account/package*.json ./
 COPY apps/account/schema.prisma ./
 RUN npm install --omit=dev
 RUN npm install --dev prisma
-RUN npm run prisma generate
+RUN npx prisma generate
 
 # Production image, copy all the files and run nest
 FROM docker.io/node:$NODE_VERSION AS runner
