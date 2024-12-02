@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { schema } from '../config'
+import { schema } from '../infrastructure/config'
 
 @Module({
   imports: [
