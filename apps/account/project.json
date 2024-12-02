@@ -28,26 +28,6 @@
         }
       }
     },
-    "build": {
-      "executor": "@nx/js:tsc",
-      "dependsOn": ["prisma-generate"],
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/apps/my-app",
-        "main": "apps/account/src/main.ts",
-        "tsConfig": "apps/account/tsconfig.app.json",
-        "transformers": [
-          {
-            "name": "@nestjs/swagger/plugin",
-            "options": {
-              "introspectComments": true
-            }
-          }
-        ]
-      }
-    },
     "prisma-deploy": {
       "executor": "@nx-tools/nx-prisma:deploy",
       "options": {
@@ -123,7 +103,7 @@
     "container": {
       "executor": "@nx-tools/nx-container:build",
       "defaultConfiguration": "local",
-      "dependsOn": ["build"],
+      "dependsOn": ["prisma-generate","build"],
       "options": {
         "load": true,
         "engine": "docker",
