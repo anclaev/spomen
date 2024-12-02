@@ -60,7 +60,7 @@ jobs:
       - run: yarn --frozen-lockfile --ignore-scripts
 
       - uses: nrwl/nx-set-shas@v3
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=build,test --parallel=3
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3 --coverage --coverage-reports=json,json-summary
         env:
           DATABASE_URL: postgresql://postgres:postgres@posgtres:5432/postgres
           DB_HOST: postgres
