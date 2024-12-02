@@ -45,7 +45,9 @@
       "include": ["e2e/**/*"],
       "options": {
         "targetName": "e2e-local",
-        "ciTargetName": "e2e-ci"
+        "ciTargetName": "e2e-ci",
+        "coverage": true,
+        "coverage-reports": "json,json-summary"
       }
     }
   ],
