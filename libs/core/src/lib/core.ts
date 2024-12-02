@@ -4,7 +4,3 @@ export * from './utils'
 export * from './enums'
 export * from './types'
 export * from './config'
-
-export function core(): string {
-  return 'core'
-}
