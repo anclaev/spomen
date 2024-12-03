@@ -4,3 +4,8 @@ export * from './utils'
 export * from './enums'
 export * from './types'
 export * from './config'
+
+export class BaseEntity {
+  id: string
+  created_at: Date
+}
