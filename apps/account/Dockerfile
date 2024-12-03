@@ -17,7 +17,7 @@ FROM node:hydrogen-alpine AS runner
 WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=deps /usr/src/app/package.json ./package.json
-COPY --from=deps /urs/src/app/prisma ./prisma
+COPY --from=deps /usr/src/app/prisma ./prismas
 COPY dist/apps/account .
 RUN chown -R node:node .
 USER node
