@@ -22,7 +22,6 @@ export class CreateAccountHandler
 
   async execute({ dto }: CreateAccountCommand): Promise<IAccount> {
     dto.password = await argon2.hash(dto.password)
-
     const account = await this.accountFactory.create({
       login: dto.login,
       sex: dto.sex,

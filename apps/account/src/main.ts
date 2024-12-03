@@ -3,11 +3,11 @@ import {
   createLogger,
   PrismaClientExceptionFilter,
   SERVICES,
+  withDeployMigrations,
 } from '@spomen/core'
 
 import { HttpAdapterHost, NestFactory } from '@nestjs/core'
 import { Logger } from '@nestjs/common'
-import { exec } from 'child_process'
 
 import { ENV } from './infrastructure/Config'
 
@@ -36,18 +36,7 @@ async function bootstrap() {
 }
 
 if (process.env.DOCKER) {
-  exec('npx prisma migrate deploy', (err, stdout, stderr) => {
-    if (err) {
-      console.error()
-      console.error('Error:')
-      console.error(err)
-      console.error()
-    }
-    console.log(stdout)
-    console.error(stderr)
-
-    bootstrap()
-  })
+  withDeployMigrations(bootstrap)
 } else {
   bootstrap()
 }
