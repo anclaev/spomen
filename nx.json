@@ -2,7 +2,11 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "defaultBase": "main",
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals", "{workspaceRoot}/e2e/**/*"],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals",
+      "{workspaceRoot}/e2e/**/*"
+    ],
     "production": [
       "default",
       "!{projectRoot}/.eslintrc.json",
@@ -18,14 +22,6 @@
   "nxCloudId": "67435bd5859cbb0f3cbe7f01",
   "plugins": [
     {
-      "plugin": "@nx/webpack/plugin",
-      "options": {
-        "buildTargetName": "build",
-        "serveTargetName": "serve",
-        "previewTargetName": "preview"
-      }
-    },
-    {
       "plugin": "@nx/eslint/plugin",
       "options": {
         "targetName": "lint"
@@ -35,7 +31,9 @@
       "plugin": "@nx/jest/plugin",
       "exclude": ["e2e/**/*"],
       "options": {
-        "targetName": "test"
+        "targetName": "test",
+        "coverage": true,
+        "coverage-reports": "json,json-summary"
       }
     },
     {
@@ -43,7 +41,9 @@
       "include": ["e2e/**/*"],
       "options": {
         "targetName": "e2e-local",
-        "ciTargetName": "e2e-ci"
+        "ciTargetName": "e2e-ci",
+        "coverage": true,
+        "coverage-reports": "json,json-summary"
       }
     }
   ],

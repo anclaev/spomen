@@ -1,20 +1,18 @@
-ARG NODE_VERSION=lts-alpine
-
-# Install dependencies only when needed
-FROM docker.io/node:$NODE_VERSION AS deps
-RUN apk add --no-cache libc6-compat
+FROM node:hydrogen-alpine AS deps
 WORKDIR /usr/src/app
 COPY dist/apps/account/package*.json ./
-RUN npm install --omit=dev
+COPY apps/account/prisma ./prisma
+RUN npm install --omit=dev --force
+RUN npm install --dev prisma --force
+RUN npx prisma generate
 
-# Production image, copy all the files and run nest
-FROM docker.io/node:$NODE_VERSION AS runner
-RUN apk add --no-cache dumb-init
+FROM node:hydrogen-alpine AS runner
 WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=deps /usr/src/app/package.json ./package.json
+COPY --from=deps /usr/src/app/prisma ./prisma
 COPY dist/apps/account .
-RUN chown -R node:node .
 USER node
 EXPOSE 3000
-CMD ["dumb-init", "node", "main.js"]
+ENV DOCKER=true
+CMD ["node", "main.js"]

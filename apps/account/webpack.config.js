@@ -11,8 +11,16 @@ module.exports = {
       compiler: 'tsc',
       main: './src/main.ts',
       tsConfig: './tsconfig.app.json',
-      assets: ['./src/assets'],
-      optimization: process.env['NODE_ENV'] === 'production',
+      assets: [
+        {
+          input: 'libs/core/src/lib/protos',
+          output: 'protos',
+          glob: '**/*',
+        },
+      ],
+      optimization:
+        process.env['NODE_ENV'] === 'production' ||
+        process.env['NODE_ENV'] === 'staging',
       outputHashing: 'none',
       generatePackageJson: true,
     }),

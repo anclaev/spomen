@@ -15,18 +15,31 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "dependsOn": [
+        "prisma-generate"
+      ],
+      "cache": true,
+      "parallelism": false,
       "options": {
         "outputPath": "dist/libs/core",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "packageJson": "libs/core/package.json",
         "main": "libs/core/src/index.ts",
-        "assets": ["libs/core/*.md"]
+        "assets": [
+          "libs/core/*.md"
+        ]
       }
     },
-    "nx-release-publish": {
+    "test": {
+      "dependsOn": ["prisma-generate"]
+    },
+    "prisma-generate": {
+      "executor": "@nx-tools/nx-prisma:generate",
       "options": {
-        "packageRoot": "dist/{projectRoot}"
+        "schema": "merged-schema.prisma"
       }
     }
   }
