@@ -44,10 +44,10 @@
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "dependsOn": ["prisma-generate"],
       "options": {
         "buildTarget": "@spomen/auth:build",
-        "runBuildTargetDependencies": false
+        "runBuildTargetDependencies": false,
+        "inspect": false
       },
       "target": "node",
       "compiler": "tsc",
@@ -63,9 +63,6 @@
         }
       }
     },
-    "test": {
-      "dependsOn": ["prisma-generate"]
-    },
     "container": {
       "executor": "@nx-tools/nx-container:build",
       "defaultConfiguration": "local",
@@ -80,11 +77,21 @@
         ]
       },
       "configurations": {
-        "dev": {
+        "local": {
           "push": false,
           "load": true,
           "build-args": [
             "NODE_ENV=local"
+          ],
+          "tags": [
+            "anclaev/spomen-account:local"
+          ]
+        },
+        "development": {
+          "push": false,
+          "load": true,
+          "build-args": [
+            "NODE_ENV=development"
           ],
           "tags": [
             "anclaev/spomen-auth:dev"
@@ -137,7 +144,7 @@
     "prisma-generate": {
       "executor": "@nx-tools/nx-prisma:generate",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "merged-schema.prisma"
       }
     },
     "prisma-migrate": {

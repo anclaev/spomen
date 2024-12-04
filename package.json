@@ -9,11 +9,14 @@
     "commit": "yarn git-cz",
     "changelog": "yarn conventional-changelog -p nextjs -i CHANGELOG.md -s",
     "push": "git push --follow-tags origin && git push --follow-tags gitverse",
-    "lint": "nx run-many --target=lint --all",
-    "lint:fix": "nx run-many --target=lint --all --fix",
-    "build": "bash ./docker/build.sh",
-    "serve": "bash ./docker/serve.sh",
-    "dev": "bash ./docker/run.sh"
+    "lint": "nx run-many -t lint --all --skip-nx-cache",
+    "lint:fix": "nx run-many -t lint --all --fix --skip-nx-cache",
+    "run-services": "bash scripts/run-services.sh",
+    "merge-schema": "bash scripts/merge-schema.sh",
+    "build:docker": "bash scripts/build.sh",
+    "serve": "nx serve",
+    "serve:all": "nx run-many -t serve --all --skip-nx-cache",
+    "test:all": "nx run-many -t test --all --skip-nx-cache --output-style=stream"
   },
   "private": true,
   "config": {
@@ -100,6 +103,7 @@
     "nx": "20.1.3",
     "prettier": "^3.3.3",
     "prisma": "^6.0.1",
+    "prisma-merge-schema": "^1.0.0",
     "standard-version": "^9.5.0",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",

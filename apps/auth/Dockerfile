@@ -1,6 +1,6 @@
 # ARG NODE_VERSION=lts-alpine
 
-#FROM docker.io/node:$NODE_VERSION AS deps
+#FROM scripts.io/node:$NODE_VERSION AS deps
 FROM node:hydrogen-alpine AS deps
 # RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
@@ -11,7 +11,7 @@ RUN npm install --omit=dev --force
 RUN npm install --dev prisma --force
 RUN npx prisma generate
 
-#FROM docker.io/node:$NODE_VERSION AS runner
+#FROM scripts.io/node:$NODE_VERSION AS runner
 FROM node:hydrogen-alpine AS runner
 # RUN apk add --no-cache dumb-init
 WORKDIR /usr/src/app

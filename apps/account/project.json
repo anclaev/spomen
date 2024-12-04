@@ -33,6 +33,9 @@
         "webpackConfig": "apps/account/webpack.config.js"
       },
       "configurations": {
+        "local": {
+
+        },
         "development": {
         },
         "staging": {
@@ -44,10 +47,10 @@
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "dependsOn": ["prisma-generate"],
       "options": {
         "buildTarget": "@spomen/account:build",
-        "runBuildTargetDependencies": false
+        "runBuildTargetDependencies": false,
+        "inspect": false
       },
       "configurations": {
         "development": {
@@ -60,9 +63,6 @@
           "buildTarget": "@spomen/account:build:production"
         }
       }
-    },
-    "test": {
-      "dependsOn": ["prisma-generate"]
     },
     "prisma-deploy": {
       "executor": "@nx-tools/nx-prisma:deploy",
@@ -79,7 +79,7 @@
     "prisma-generate": {
       "executor": "@nx-tools/nx-prisma:generate",
       "options": {
-        "schema": "apps/account/prisma/schema.prisma"
+        "schema": "merged-schema.prisma"
       }
     },
     "prisma-migrate": {
@@ -138,11 +138,8 @@
     },
     "container": {
       "executor": "@nx-tools/nx-container:build",
-      "defaultConfiguration": "dev",
-      "dependsOn": [
-        "prisma-generate",
-        "build"
-      ],
+      "defaultConfiguration": "local",
+      "dependsOn": ["build"],
       "options": {
         "load": true,
         "engine": "docker",
@@ -151,11 +148,21 @@
         ]
       },
       "configurations": {
-        "dev": {
+        "local": {
           "push": false,
           "load": true,
           "build-args": [
             "NODE_ENV=local"
+          ],
+          "tags": [
+            "anclaev/spomen-account:local"
+          ]
+        },
+        "development": {
+          "push": false,
+          "load": true,
+          "build-args": [
+            "NODE_ENV=development"
           ],
           "tags": [
             "anclaev/spomen-account:dev"

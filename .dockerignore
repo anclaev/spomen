@@ -2,3 +2,5 @@ node_modules
 .github
 .husky
 .idea
+scripts
+notes
