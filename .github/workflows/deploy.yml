@@ -40,8 +40,10 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
+      - run: yarn merge-schema
+
       - uses: nrwl/nx-set-shas@v4
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=container --configuration=$ENVIRONMENT --no-agents
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD -t container -c $ENVIRONMENT --skip-nx-cache
 
 #  deploy:
 #    name: 'Деплой сервисов'
@@ -57,4 +59,4 @@ jobs:
 #          passphrase: ${{ secrets.SSH_PASSPHRASE }}
 #          script: |
 #            cd ${{ secrets.SSH_PATH }}
-#            sudo ./dev.sh dev
+#            sudo ./serve.sh dev

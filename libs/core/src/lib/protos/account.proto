@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package account;
+
+service AccountService {
+  rpc GetAccountPasswordByLogin(GetAccountByLoginPayload) returns (AccountCredentialsWithPassword) {}
+  rpc GetAccountPasswordByEmail(GetAccountByEmailPayload) returns (AccountCredentialsWithPassword) {}
+  rpc GetAccountPasskeyByLogin(GetAccountByLoginPayload) returns (AccountCredentialsWithPasskey) {}
+  rpc GetAccountPasskeyByEmail(GetAccountByEmailPayload) returns (AccountCredentialsWithPasskey) {}
+  rpc CreateAccount(CreateAccountPayload) returns (Status) {}
+}
+
+message GetAccountByLoginPayload {
+  string login = 1;
+}
+
+message GetAccountByEmailPayload {
+  string email = 1;
+}
+
+message CreateAccountPayload {
+  optional string login = 1;
+  string email = 2;
+  string password = 3;
+  optional string first_name = 4;
+  optional string last_name = 5;
+  optional string birthday = 6;
+  optional int32 sex = 7;
+}
+
+message AccountCredentialsWithPassword {
+  string id = 1;
+  string email = 2;
+  optional string login = 3;
+  string password = 4;
+}
+
+message AccountCredentialsWithPasskey {
+  string id = 1;
+  string email = 2;
+  optional string login = 3;
+  optional string passkey = 4;
+}
+
+message Status {
+  bool status = 1;
+}

@@ -26,7 +26,7 @@ export class CreateAccountHandler
       login: dto.login,
       sex: dto.sex,
       email: dto.email,
-      birthday: dto.birthday,
+      birthday: new Date(dto.birthday),
       password: dto.password,
       first_name: dto.first_name,
       last_name: dto.last_name,

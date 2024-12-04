@@ -43,8 +43,8 @@
 |                       | Доставка (Delivery)    |
 |                       | Оплата (Payment)       |
 |                       | Склад (Darkstore)      |
-| Аккаунт (Account)     |
-|                       | Аккаунт(Account)       |
+| Аккаунт (Auth)        |
+|                       | Аккаунт(Auth)          |
 |                       |                        | Сессии (Sessions)                     |
 |                       |                        | История сессий (SessionHistory)       |
 | Хранилище (Storage)   |

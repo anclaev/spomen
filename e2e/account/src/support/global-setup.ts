@@ -3,7 +3,7 @@
 var __TEARDOWN_MESSAGE__: string
 
 module.exports = async function () {
-  // Start services that that the application needs to run (e.g. database, docker-compose, etc.).
+  // Start services that that the application needs to run (e.g. database, scripts-compose, etc.).
   console.log('\nSetting up...\n')
 
   // Hint: Use `globalThis` to pass variables to global teardown.

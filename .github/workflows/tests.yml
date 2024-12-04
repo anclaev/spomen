@@ -18,7 +18,7 @@ env:
 jobs:
   tests-prepare:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: "!contains(github.event.head_commit.message, '[skip tests]')"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -60,12 +60,10 @@ jobs:
 
       - run: yarn --frozen-lockfile --ignore-scripts
 
-      - uses: nrwl/nx-set-shas@v3
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=prisma-generate --no-agents
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@posgtres:5432/postgres
+      - run: yarn merge-schema
 
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --no-agents --coverage --coverage-reports=json,json-summary
+      - uses: nrwl/nx-set-shas@v3
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD -t test --coverage --coverage-reports=json,json-summary --skip-nx-cache
         env:
           DATABASE_URL: postgresql://postgres:postgres@posgtres:5432/postgres
 

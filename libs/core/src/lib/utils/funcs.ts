@@ -1,3 +1,7 @@
+import { SafeParseError, SafeParseSuccess } from 'zod'
+import { RpcException } from '@nestjs/microservices'
+import * as grpc from '@grpc/grpc-js'
+
 export function mergeObject(
   obj1: Record<string, unknown>,
   obj2: Record<string, unknown>
@@ -33,4 +37,15 @@ export function expandObject(
   )
 
   return resObj
+}
+
+export function expectGrpcValidationError(
+  val: SafeParseSuccess<unknown> | SafeParseError<unknown>
+): void {
+  if (val.error) {
+    throw new RpcException({
+      code: grpc.status.INVALID_ARGUMENT,
+      message: val.error.errors.map((err) => err.message).join('\n'),
+    })
+  }
 }

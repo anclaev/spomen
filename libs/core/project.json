@@ -15,91 +15,31 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "dependsOn": ["prisma-generate"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "dependsOn": [
+        "prisma-generate"
+      ],
+      "cache": true,
+      "parallelism": false,
       "options": {
         "outputPath": "dist/libs/core",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "packageJson": "libs/core/package.json",
         "main": "libs/core/src/index.ts",
-        "assets": ["libs/core/*.md"]
+        "assets": [
+          "libs/core/*.md"
+        ]
       }
     },
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "dist/{projectRoot}"
-      }
-    },
-    "prisma-deploy": {
-      "executor": "@nx-tools/nx-prisma:deploy",
-      "options": {
-        "schema": "libs/core/schema.prisma"
-      }
-    },
-    "prisma-format": {
-      "executor": "@nx-tools/nx-prisma:format",
-      "options": {
-        "schema": "libs/core/schema.prisma"
-      }
+    "test": {
+      "dependsOn": ["prisma-generate"]
     },
     "prisma-generate": {
       "executor": "@nx-tools/nx-prisma:generate",
       "options": {
-        "schema": "libs/core/schema.prisma"
-      }
-    },
-    "prisma-migrate": {
-      "executor": "@nx-tools/nx-prisma:migrate",
-      "options": {
-        "schema": "libs/core/schema.prisma"
-      }
-    },
-    "prisma-pull": {
-      "executor": "@nx-tools/nx-prisma:pull",
-      "options": {
-        "schema": "libs/core/schema.prisma"
-      }
-    },
-    "prisma-push": {
-      "executor": "@nx-tools/nx-prisma:push",
-      "options": {
-        "schema": "libs/core/schema.prisma"
-      }
-    },
-    "prisma-reset": {
-      "executor": "@nx-tools/nx-prisma:reset",
-      "options": {
-        "schema": "libs/core/schema.prisma"
-      }
-    },
-    "prisma-resolve": {
-      "executor": "@nx-tools/nx-prisma:resolve",
-      "options": {
-        "schema": "libs/core/schema.prisma"
-      }
-    },
-    "prisma-seed": {
-      "executor": "@nx-tools/nx-prisma:seed",
-      "options": {
-        "schema": "libs/core/schema.prisma"
-      }
-    },
-    "prisma-status": {
-      "executor": "@nx-tools/nx-prisma:status",
-      "options": {
-        "schema": "libs/core/schema.prisma"
-      }
-    },
-    "prisma-studio": {
-      "executor": "@nx-tools/nx-prisma:studio",
-      "options": {
-        "schema": "libs/core/schema.prisma"
-      }
-    },
-    "prisma-validate": {
-      "executor": "@nx-tools/nx-prisma:validate",
-      "options": {
-        "schema": "libs/core/schema.prisma"
+        "schema": "merged-schema.prisma"
       }
     }
   }
