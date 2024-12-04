@@ -1,4 +1,4 @@
-# Account
+# Auth
 
 ## Сервис
 

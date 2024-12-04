@@ -7,12 +7,16 @@ import { CqrsModule } from '@nestjs/cqrs'
 import { AccountRepository } from './infrastructure/AccountRepository'
 import { schema } from './infrastructure/Config'
 
+import { AccountByEmailHandler } from './application/queries/AccountByEmailHandler'
+import { AccountByLoginHandler } from './application/queries/AccountByLoginHandler'
+
 import { CreateAccountHandler } from './application/commands/CreateAccountHandler'
 import { AccountCreatedHandler } from './application/events/AccountCreatedHandler'
 import { InjectionToken } from './application/injection-token'
 
 import { AccountFactory } from './domain/AccountFactory'
 
+import { GrpcAccountController } from './api/grpc-account.controller'
 import { AccountController } from './api/account.controller'
 
 const infrastructure: Provider[] = [
@@ -31,7 +35,12 @@ const infrastructure: Provider[] = [
   { provide: APP_INTERCEPTOR, useClass: ZodSerializerInterceptor },
 ]
 
-const application = [CreateAccountHandler, AccountCreatedHandler]
+const application = [
+  CreateAccountHandler,
+  AccountCreatedHandler,
+  AccountByEmailHandler,
+  AccountByLoginHandler,
+]
 const domain = [AccountFactory]
 
 @Module({
@@ -42,7 +51,7 @@ const domain = [AccountFactory]
     }),
     CqrsModule,
   ],
-  controllers: [AccountController],
+  controllers: [GrpcAccountController, AccountController],
   providers: [...infrastructure, ...application, ...domain],
 })
 export class AppModule {}

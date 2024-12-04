@@ -2,16 +2,49 @@
   "name": "@spomen/account",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/account/src",
-  "authors": ["Artem Samarin <iahugo@yandex.ru> (https://t.me/anclaev)"],
+  "authors": [
+    "Artem Samarin <iahugo@yandex.ru> (https://t.me/anclaev)"
+  ],
   "copyright": "anclaev",
   "description": "Account service of Spomen",
   "projectType": "application",
-  "tags": ["account"],
+  "tags": [
+    "@spomen/account"
+  ],
+  "implicitDependencies": [
+    "@spomen/core"
+  ],
   "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "dependsOn": [
+        "prisma-generate"
+      ],
+      "defaultConfiguration": "development",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/account",
+        "main": "apps/account/src/main.ts",
+        "tsConfig": "apps/account/tsconfig.app.json",
+        "webpackConfig": "apps/account/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+        },
+        "staging": {
+        },
+        "production": {
+        }
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "dependsOn": ["prisma-generate","build"],
+      "dependsOn": ["prisma-generate"],
       "options": {
         "buildTarget": "@spomen/account:build",
         "runBuildTargetDependencies": false
@@ -102,35 +135,61 @@
     },
     "container": {
       "executor": "@nx-tools/nx-container:build",
-      "defaultConfiguration": "local",
-      "dependsOn": ["prisma-generate","build"],
+      "defaultConfiguration": "dev",
+      "dependsOn": [
+        "prisma-generate",
+        "build"
+      ],
       "options": {
         "load": true,
         "engine": "docker",
-        "build-args": ["NODE_ENV=local"]
+        "build-args": [
+          "NODE_ENV=local"
+        ]
       },
       "configurations": {
         "dev": {
           "push": false,
           "load": true,
-          "build-args": ["NODE_ENV=local"],
-          "tags": ["anclaev/spomen-account:dev"]
+          "build-args": [
+            "NODE_ENV=local"
+          ],
+          "tags": [
+            "anclaev/spomen-account:dev"
+          ]
         },
         "staging": {
           "push": true,
-          "cache-from": ["type=gha"],
-          "cache-to": ["type=gha,mode=max"],
-          "build-args": ["NODE_ENV=staging"],
-          "tags": ["anclaev/spomen-account:staging"]
+          "cache-from": [
+            "type=gha"
+          ],
+          "cache-to": [
+            "type=gha,mode=max"
+          ],
+          "build-args": [
+            "NODE_ENV=staging"
+          ],
+          "tags": [
+            "anclaev/spomen-account:staging"
+          ]
         },
         "production": {
           "push": true,
-          "cache-from": ["type=gha"],
-          "cache-to": ["type=gha,mode=max"],
-          "build-args": ["NODE_ENV=production"],
-          "tags": ["anclaev/spomen-account:latest"]
+          "cache-from": [
+            "type=gha"
+          ],
+          "cache-to": [
+            "type=gha,mode=max"
+          ],
+          "build-args": [
+            "NODE_ENV=production"
+          ],
+          "tags": [
+            "anclaev/spomen-account:latest"
+          ]
         }
       }
     }
   }
 }
+

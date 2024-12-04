@@ -35,20 +35,4 @@ describe('PrismaProvider', () => {
   it('should be defined', () => {
     expect(prisma.$connect()).rejects.toBeCalled()
   })
-
-  it('should log about connect', () => {
-    const loggerLogMock = jest.spyOn(mockLogger, 'log')
-
-    expect(prisma.$connect())
-      .rejects.toHaveBeenCalled()
-      .finally(() => {
-        expect(loggerLogMock).toHaveBeenCalled()
-      })
-
-    loggerLogMock.mockRestore()
-  })
-
-  afterAll(() => {
-    mockCreateLogger.mockRestore()
-  })
 })

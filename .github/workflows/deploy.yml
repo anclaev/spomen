@@ -57,4 +57,4 @@ jobs:
 #          passphrase: ${{ secrets.SSH_PASSPHRASE }}
 #          script: |
 #            cd ${{ secrets.SSH_PATH }}
-#            sudo ./dev.sh dev
+#            sudo ./run.sh dev

@@ -1,0 +1,15 @@
+services:
+  account:
+    image: anclaev/spomen-account:dev
+    environment:
+      DATABASE_URL: ${ACCOUNT_DATABASE_URL}
+      NODE_ENV: "local"
+      HOST: 0.0.0.0
+      PORT: 3004
+      GRPC_PORT: 3014
+    ports:
+      - 3004:3004
+      - 3014:3014
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+

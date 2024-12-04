@@ -7,8 +7,8 @@ WORKDIR /usr/src/app
 COPY dist/apps/account/package*.json ./
 COPY apps/account/prisma ./prisma
 
-RUN npm install --omit=dev
-RUN npm install --dev prisma
+RUN npm install --omit=dev --force
+RUN npm install --dev prisma --force
 RUN npx prisma generate
 
 #FROM docker.io/node:$NODE_VERSION AS runner
@@ -17,10 +17,11 @@ FROM node:hydrogen-alpine AS runner
 WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=deps /usr/src/app/package.json ./package.json
-COPY --from=deps /usr/src/app/prisma ./prismas
+COPY --from=deps /usr/src/app/prisma ./prisma
 COPY dist/apps/account .
-RUN chown -R node:node .
+# RUN chown -R node:node .
 USER node
 EXPOSE 3000
 ENV DOCKER=true
-CMD ["dumb-init", "node", "main.js"]
+# CMD ["dumb-init", "node", "main.js"]
+CMD ["node", "main.js"]

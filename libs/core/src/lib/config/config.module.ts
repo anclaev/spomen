@@ -25,6 +25,7 @@ export class ConfigModule {
         }),
       ],
       providers: [ConfigService],
+      exports: [ConfigService],
       global: true,
     }
   }

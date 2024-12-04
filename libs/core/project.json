@@ -17,6 +17,8 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "dependsOn": ["prisma-generate"],
+      "cache": true,
+      "parallelism": false,
       "options": {
         "outputPath": "dist/libs/core",
         "tsConfig": "libs/core/tsconfig.lib.json",
