@@ -43,8 +43,7 @@ jobs:
       - run: yarn merge-schema
 
       - uses: nrwl/nx-set-shas@v4
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected \
-          --base=$NX_BASE --head=$NX_HEAD -t container -c $ENVIRONMENT --skip-nx-cache
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD -t container -c $ENVIRONMENT --skip-nx-cache
 
 #  deploy:
 #    name: 'Деплой сервисов'

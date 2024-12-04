@@ -63,8 +63,7 @@ jobs:
       - run: yarn merge-schema
 
       - uses: nrwl/nx-set-shas@v3
-      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected \
-          --base=$NX_BASE --head=$NX_HEAD -t test --coverage --coverage-reports=json,json-summary --skip-nx-cache
+      - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected -base=$NX_BASE --head=$NX_HEAD -t test --coverage --coverage-reports=json,json-summary --skip-nx-cache
         env:
           DATABASE_URL: postgresql://postgres:postgres@posgtres:5432/postgres
 
