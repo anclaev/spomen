@@ -16,7 +16,7 @@ services:
       KAFKA_KRAFT_CLUSTER_ID: S40B8iVtR0umuTyuM1eLjA
       KAFKA_CFG_NODE_ID: 1
     volumes:
-      - volume-kafka:/bitnami/kafka
+      - spomen-local-kafka:/bitnami/kafka
     extra_hosts:
       - "host.scripts.internal:host-gateway"
 
@@ -33,5 +33,6 @@ services:
       - "host.scripts.internal:host-gateway"
 
 volumes:
-  volume-kafka:
+  spomen-local-kafka:
+    external: true
 

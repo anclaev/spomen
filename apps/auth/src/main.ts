@@ -30,7 +30,7 @@ async function bootstrap() {
       options: {
         package: 'auth',
         url: `${host}:${grpc_port}`,
-        protoPath: join(__dirname, 'protos/auth.proto'),
+        protoPath: join(__dirname, 'protos/auth/src/auth.proto'),
         loader: { keepCase: true },
       },
     },

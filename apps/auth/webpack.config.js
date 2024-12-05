@@ -12,9 +12,9 @@ module.exports = {
       main: './src/main.ts',
       assets: [
         {
-          input: 'libs/core/src/lib/protos',
+          input: 'apps',
           output: 'protos',
-          glob: '**/*',
+          glob: '**/*.proto',
         },
       ],
       tsConfig: './tsconfig.app.json',

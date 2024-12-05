@@ -49,7 +49,7 @@ const services: Provider[] = [
         transport: Transport.GRPC,
         options: {
           package: 'account',
-          protoPath: join(__dirname, 'protos/account.proto'),
+          protoPath: join(__dirname, 'protos/account/src/account.proto'),
           loader: { keepCase: true },
           url: config.env<ENV>('ACCOUNT_GRPC_URL'),
         },

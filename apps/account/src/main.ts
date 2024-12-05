@@ -33,7 +33,7 @@ async function bootstrap() {
       options: {
         package: 'account',
         url: `${host}:${grpc_port}`,
-        protoPath: join(__dirname, 'protos/account.proto'),
+        protoPath: join(__dirname, 'protos/account/src/account.proto'),
         loader: { keepCase: true },
       },
     },
