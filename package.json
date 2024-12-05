@@ -14,7 +14,6 @@
     "run-services": "bash scripts/run-services.sh",
     "generate-proto": "bash scripts/generate-proto.sh",
     "merge-schema": "bash scripts/merge-schema.sh",
-    "generate-types": "yarn generate-proto && yarn merge-schema",
     "build:docker": "bash scripts/build.sh",
     "serve": "nx serve",
     "serve:all": "nx run-many -t serve --all --skip-nx-cache",

@@ -40,8 +40,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - run: sudo ln -s /usr/bin/nodejs /usr/bin/node
-      - run: yarn generate-types
+      - run: yarn merge-schema
 
       - uses: nrwl/nx-set-shas@v4
       - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD -t container -c $ENVIRONMENT --skip-nx-cache
