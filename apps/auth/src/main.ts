@@ -6,6 +6,7 @@ import {
 } from '@spomen/core'
 
 import { MicroserviceOptions, Transport } from '@nestjs/microservices'
+import { ReflectionService } from '@grpc/reflection'
 import { NestFactory } from '@nestjs/core'
 import { Logger } from '@nestjs/common'
 import { join } from 'path'
@@ -14,7 +15,11 @@ import { ENV } from './infrastructure/Config'
 
 import { AppModule } from './app.module'
 
+import tracer from './tracing'
+
 async function bootstrap() {
+  await tracer.start()
+
   const app = await NestFactory.create(AppModule, {
     logger: createLogger(SERVICES.AUTH),
   })
@@ -30,8 +35,11 @@ async function bootstrap() {
       options: {
         package: 'auth',
         url: `${host}:${grpc_port}`,
-        protoPath: join(__dirname, 'protos/auth.proto'),
+        protoPath: join(__dirname, 'protos/auth/src/auth.proto'),
         loader: { keepCase: true },
+        onLoadPackageDefinition: (pkg, server) => {
+          new ReflectionService(pkg).addToServer(server)
+        },
       },
     },
     { inheritAppConfig: true }

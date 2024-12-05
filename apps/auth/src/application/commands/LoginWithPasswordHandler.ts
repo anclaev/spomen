@@ -63,9 +63,12 @@ export class LoginWithPasswordHandler
         )
       }
     } catch (e) {
+      console.log(this.account)
       // TODO: Добавить логирование того, что сервис аккаунтов лежит
       return null
     }
+
+    console.log(credentials!)
 
     const passwordIsVerified = await argon2.verify(
       credentials!.password,
