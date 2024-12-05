@@ -16,7 +16,11 @@ import { ENV } from './infrastructure/Config'
 
 import { AppModule } from './app.module'
 
+import tracer from './tracing'
+
 async function bootstrap() {
+  await tracer.start()
+
   const app = await NestFactory.create(AppModule, {
     logger: createLogger(SERVICES.ACCOUNT),
   })
