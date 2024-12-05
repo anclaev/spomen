@@ -40,7 +40,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - run: ln -s /usr/bin/nodejs /usr/bin/node
+      - run: sudo ln -s /usr/bin/nodejs /usr/bin/node
       - run: yarn generate-types
 
       - uses: nrwl/nx-set-shas@v4
