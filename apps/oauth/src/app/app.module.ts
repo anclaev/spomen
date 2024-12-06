@@ -5,6 +5,9 @@ import { Module, Provider } from '@nestjs/common'
 import { CqrsModule } from '@nestjs/cqrs'
 import { JwtModule } from '@nestjs/jwt'
 
+import { AccountRepository } from '../infrastructure/repository/account.repository'
+import { SessionRepository } from '../infrastructure/repository/session.repository'
+
 import { InjectionToken } from './injection-token'
 import { schema } from '../infrastructure/Config'
 
@@ -12,6 +15,14 @@ const infrastructure: Provider[] = [
   {
     provide: InjectionToken.PRISMA_PROVIDER,
     useClass: PrismaProvider,
+  },
+  {
+    provide: InjectionToken.ACCOUNT_REPOSITORY,
+    useClass: AccountRepository,
+  },
+  {
+    provide: InjectionToken.SESSION_REPOSITORY,
+    useClass: SessionRepository,
   },
   {
     provide: APP_PIPE,
