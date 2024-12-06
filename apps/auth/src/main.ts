@@ -55,7 +55,7 @@ async function bootstrap() {
     })
 
   await app
-    .listen(config.env<ENV>('PORT'))
+    .listen(http_port)
     .then(() => Logger.log(`Сервис успешно запущен (${host}:${http_port})!`))
 }
 

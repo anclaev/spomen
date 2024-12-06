@@ -20,7 +20,7 @@ const sdk = new NodeSDK({
   traceExporter,
   instrumentations: [getNodeAutoInstrumentations()],
   resource: new Resource({
-    [ATTR_SERVICE_NAME]: SERVICES.ACCOUNT,
+    [ATTR_SERVICE_NAME]: SERVICES.OAUTH,
   }),
 })
 
@@ -33,7 +33,7 @@ process.on('SIGTERM', () => {
   sdk
     .shutdown()
     .then(() => console.log('Tracing terminated'))
-    .catch((error) => console.log('Error terminating tracing.ts', error))
+    .catch((error) => console.log('Error terminating tracing', error))
     .finally(() => process.exit(0))
 })
 

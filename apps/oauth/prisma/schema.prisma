@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountRole {
+  PUBLIC
+  ADMIN
+}
+
+enum AccountStatus {
+  CREATED
+  PENDING
+  COMFIRMED
+  BLOCKED
+  REMOVED
+}
+
+enum SessionStatus {
+  ACTIVE
+  EXPIRED
+}
+
+model Account {
+  id                  String        @id @default(uuid())
+  version             Int           @default(0)
+  username            String        @unique
+  email               String        @unique
+  password            String
+  password_updated_at DateTime      @default(now()) @db.Timestamp()
+  pin_code            String?
+  roles               AccountRole[] @default([PUBLIC])
+  status              AccountStatus @default(CREATED)
+  sessions            Session[]     @relation("AccountSession")
+  meta                Json?         @db.Json
+  created_at          DateTime      @default(now()) @db.Timestamp()
+  updated_at          DateTime      @default(now()) @db.Timestamp()
+
+  @@map("accounts")
+}
+
+model Session {
+  id            String        @id @default(uuid())
+  refresh_token String
+  status        SessionStatus @default(ACTIVE)
+  account       Account       @relation("AccountSession", fields: [account_id], references: [id])
+  account_id    String
+  expire_at     DateTime      @db.Date
+  meta          Json?         @db.Json
+  created_at    DateTime      @default(now()) @db.Timestamp()
+  updated_at    DateTime      @default(now()) @db.Timestamp()
+
+  @@map("sessions")
+}

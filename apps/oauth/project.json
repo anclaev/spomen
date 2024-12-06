@@ -1,13 +1,13 @@
 {
-  "name": "@spomen/auth",
+  "name": "@spomen/oauth",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/auth/src",
+  "sourceRoot": "apps/oauth/src",
   "projectType": "application",
-  "@spomen/authors": [
+  "authors": [
     "Artem Samarin <iahugo@yandex.ru> (https://t.me/anclaev)"
   ],
   "copyright": "anclaev",
-  "description": "Spomen Auth service of Spomen",
+  "description": " Spomen OAuth service",
   "tags": [
     "@spomen/auth"
   ],
@@ -27,10 +27,10 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/@spomen/auth",
-        "main": "apps/@spomen/auth/src/main.ts",
-        "tsConfig": "apps/@spomen/auth/tsconfig.app.json",
-        "webpackConfig": "apps/@spomen/auth/webpack.config.js"
+        "outputPath": "dist/apps/oauth",
+        "main": "apps/oauth/src/main.ts",
+        "tsConfig": "apps/oauth/tsconfig.app.json",
+        "webpackConfig": "apps/oauth/webpack.config.js"
       },
       "configurations": {
         "development": {
@@ -45,7 +45,7 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "@spomen/auth:build",
+        "buildTarget": "@spomen/oauth:build",
         "runBuildTargetDependencies": false,
         "inspect": false
       },
@@ -53,13 +53,13 @@
       "compiler": "tsc",
       "configurations": {
         "development": {
-          "buildTarget": "@spomen/auth:build:development"
+          "buildTarget": "@spomen/oauth:build:development"
         },
         "staging": {
-          "buildTarget": "@spomen/auth:build:staging"
+          "buildTarget": "@spomen/oauth:build:staging"
         },
         "production": {
-          "buildTarget": "@spomen/auth:build:production"
+          "buildTarget": "@spomen/oauth:build:production"
         }
       }
     },
@@ -87,7 +87,7 @@
             "NODE_ENV=local"
           ],
           "tags": [
-            "anclaev/spomen-auth:local"
+            "anclaev/spomen-oauth:local"
           ]
         },
         "development": {
@@ -97,7 +97,7 @@
             "NODE_ENV=development"
           ],
           "tags": [
-            "anclaev/spomen-auth:dev"
+            "anclaev/spomen-oauth:dev"
           ]
         },
         "staging": {
@@ -112,7 +112,7 @@
             "NODE_ENV=staging"
           ],
           "tags": [
-            "anclaev/spomen-auth:staging"
+            "anclaev/spomen-oauth:staging"
           ]
         },
         "production": {
@@ -127,7 +127,7 @@
             "NODE_ENV=production"
           ],
           "tags": [
-            "anclaev/spomen-auth:latest"
+            "anclaev/spomen-oauth:latest"
           ]
         }
       }
@@ -135,13 +135,13 @@
     "prisma-deploy": {
       "executor": "@nx-tools/nx-prisma:deploy",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     },
     "prisma-format": {
       "executor": "@nx-tools/nx-prisma:format",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     },
     "prisma-generate": {
@@ -153,55 +153,55 @@
     "prisma-migrate": {
       "executor": "@nx-tools/nx-prisma:migrate",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     },
     "prisma-pull": {
       "executor": "@nx-tools/nx-prisma:pull",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     },
     "prisma-push": {
       "executor": "@nx-tools/nx-prisma:push",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     },
     "prisma-reset": {
       "executor": "@nx-tools/nx-prisma:reset",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     },
     "prisma-resolve": {
       "executor": "@nx-tools/nx-prisma:resolve",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     },
     "prisma-seed": {
       "executor": "@nx-tools/nx-prisma:seed",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     },
     "prisma-status": {
       "executor": "@nx-tools/nx-prisma:status",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     },
     "prisma-studio": {
       "executor": "@nx-tools/nx-prisma:studio",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     },
     "prisma-validate": {
       "executor": "@nx-tools/nx-prisma:validate",
       "options": {
-        "schema": "apps/auth/prisma/schema.prisma"
+        "schema": "apps/oauth/prisma/schema.prisma"
       }
     }
   }
