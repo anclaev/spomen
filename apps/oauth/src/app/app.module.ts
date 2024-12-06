@@ -1,9 +1,24 @@
-import { ConfigModule, SERVICES } from '@spomen/core'
+import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod'
+import { ConfigModule, PrismaProvider, SERVICES } from '@spomen/core'
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
+import { Module, Provider } from '@nestjs/common'
 import { CqrsModule } from '@nestjs/cqrs'
-import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 
+import { InjectionToken } from './injection-token'
 import { schema } from '../infrastructure/Config'
+
+const infrastructure: Provider[] = [
+  {
+    provide: InjectionToken.PRISMA_PROVIDER,
+    useClass: PrismaProvider,
+  },
+  {
+    provide: APP_PIPE,
+    useClass: ZodValidationPipe,
+  },
+  { provide: APP_INTERCEPTOR, useClass: ZodSerializerInterceptor },
+]
 
 @Module({
   imports: [
@@ -16,5 +31,6 @@ import { schema } from '../infrastructure/Config'
       global: true,
     }),
   ],
+  providers: [...infrastructure],
 })
 export class AppModule {}
