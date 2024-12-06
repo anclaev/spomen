@@ -11,6 +11,8 @@ import { SessionRepository } from '../infrastructure/repository/session.reposito
 import { InjectionToken } from './injection-token'
 import { schema } from '../infrastructure/Config'
 
+import { AuthFactory } from '../domain/AuthFactory'
+
 const infrastructure: Provider[] = [
   {
     provide: InjectionToken.PRISMA_PROVIDER,
@@ -31,6 +33,8 @@ const infrastructure: Provider[] = [
   { provide: APP_INTERCEPTOR, useClass: ZodSerializerInterceptor },
 ]
 
+const domain = [AuthFactory]
+
 @Module({
   imports: [
     ConfigModule.register({
@@ -42,6 +46,6 @@ const infrastructure: Provider[] = [
       global: true,
     }),
   ],
-  providers: [...infrastructure],
+  providers: [...infrastructure, ...domain],
 })
 export class AppModule {}

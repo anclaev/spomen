@@ -1,5 +1,5 @@
 import { Account, AccountRole, AccountStatus } from '@prisma/client'
-import { BaseEntity } from '@spomen/core'
+import { RootEntity } from '@spomen/core'
 
 export type AccountMeta = Partial<{
   locked_by: string
@@ -10,7 +10,7 @@ export type AccountMeta = Partial<{
   removed_at: Date
 }>
 
-export class AccountEntity extends BaseEntity implements Account {
+export class AccountEntity extends RootEntity implements Account {
   login: string
   email: string
   password: string
