@@ -1,0 +1,54 @@
+enum AccountRole {
+  PUBLIC
+  ADMIN
+}
+
+enum AccountStatus {
+  CREATED
+  PENDING
+  CONFIRMED
+  LOCKED
+  MARKED
+  REMOVED
+}
+
+enum SessionStatus {
+  ACTIVE
+  EXPIRED
+}
+
+model Account {
+  id       String        @id @default(uuid())
+  login    String?       @unique
+  email    String        @unique
+  password String
+  passkey  String?
+  status   AccountStatus @default(CREATED)
+  roles    AccountRole[] @default([PUBLIC])
+  meta     Json?         @db.Json
+
+  first_name String?
+  last_name  String?
+  birthday   DateTime? @db.Date
+  sex        Int       @default(0)
+
+  sessions Session[] @relation("SessionOwner")
+
+  created_at DateTime @default(now()) @db.Timestamp()
+
+  @@map("accounts")
+}
+
+model Session {
+  id       String        @id @default(uuid())
+  token_id String        @unique
+  status   SessionStatus @default(ACTIVE)
+
+  owner    Account @relation("SessionOwner", fields: [owner_id], references: [id])
+  owner_id String
+
+  expire_at  DateTime @db.Date
+  created_at DateTime @default(now()) @db.Timestamp()
+
+  @@map("sessions")
+}
