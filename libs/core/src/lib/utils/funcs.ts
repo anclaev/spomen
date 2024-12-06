@@ -1,6 +1,9 @@
 import { SafeParseError, SafeParseSuccess } from 'zod'
 import { RpcException } from '@nestjs/microservices'
 import * as grpc from '@grpc/grpc-js'
+import { v4 } from 'uuid'
+
+import { IMessage } from '../interfaces'
 
 export function mergeObject(
   obj1: Record<string, unknown>,
@@ -49,3 +52,25 @@ export function expectGrpcValidationError(
     })
   }
 }
+
+/**
+ * Форматирование имени
+ * @description Обрезает строку и делает каждое слово с заглавной буквы
+ * @param name
+ */
+export const formatName = (name: string): string =>
+  name
+    .trim()
+    .replace(/\n/g, ' ')
+    .replace(/\s\s+/g, ' ')
+    .replace(/\w\S*/g, (w) => w.replace(/^\w/, (l) => l.toUpperCase()))
+
+/**
+ * Создание сообщения
+ * @description Генерирует сообщение с уникальным идентификатором
+ * @param message
+ */
+export const createMessage = (message: string): IMessage => ({
+  id: v4(),
+  message,
+})
