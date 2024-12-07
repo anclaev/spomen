@@ -16,3 +16,18 @@ export const loadKeys = (): RSAKeys | Error => {
     return new Error('RSA-ключи не установлены')
   }
 }
+
+export interface ITokenPayload {
+  client_id: string
+  account_id: string
+  username: string
+  email: string
+}
+
+export interface IRefreshPayload extends ITokenPayload {
+  token_id: string
+}
+
+export interface IConfirmPayload extends ITokenPayload {
+  version: number
+}

@@ -9,7 +9,7 @@ import {
 import { HttpAdapterHost, NestFactory } from '@nestjs/core'
 import { Logger } from '@nestjs/common'
 
-import { loadKeys } from './infrastructure/Keys'
+import { loadKeys } from './infrastructure/token/Tokens'
 import { ENV } from './infrastructure/Config'
 
 import { AppModule } from './app/app.module'

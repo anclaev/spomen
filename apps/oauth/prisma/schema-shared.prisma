@@ -53,6 +53,7 @@ model OAuthClient {
   id      String   @id @default(uuid())
   version Int      @default(0)
   name    String
+  domain  String
   scopes  String[] @default([])
 
   sessions Session[] @relation("OAuthClientSessions")

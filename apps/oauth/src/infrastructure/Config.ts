@@ -14,23 +14,23 @@ export const schema = defaultConfigSchema.extend({
     .min(4, { message: `${PORT_INVALID} gRPC` })
     .max(5, { message: `${PORT_INVALID} gRPC` })
     .transform(Number),
-  RESET_PASSWORD_TOKEN_SECRET: z.string({
-    message: 'Секрет токена восстановления пароля не установлен',
+  RESET_TOKEN_SECRET: z.string({
+    message: 'Секрет токена восстановления не установлен',
   }),
-  RESET_PASSWORD_TOKEN_EXPIRATION: z
+  RESET_TOKEN_EXPIRATION: z
     .string({
-      message: 'Время жизни токена восстановления пароля не установлено',
+      message: 'Время жизни токена восстановления не установлено',
     })
     .regex(/^\d+$/, {
       message: `${EXPIRATION_INVALID}, токена восстановления пароля`,
     })
     .transform(Number),
-  CONFIRMATION_EMAIL_TOKEN_SECRET: z.string({
-    message: 'Секрет токена подтверждения почты не установлен',
+  CONFIRMATION_TOKEN_SECRET: z.string({
+    message: 'Секрет токена подтверждения не установлен',
   }),
-  CONFIRMATION_EMAIL_TOKEN_EXPIRATION: z
+  CONFIRMATION_TOKEN_EXPIRATION: z
     .string({
-      message: 'Время жизни токена подтверждения почты не установлено',
+      message: 'Время жизни токена подтверждения не установлено',
     })
     .regex(/^\d+$/, {
       message: `${EXPIRATION_INVALID}, токена подтверждения почты`,
@@ -74,3 +74,5 @@ export const schema = defaultConfigSchema.extend({
 })
 
 export type ENV = z.infer<typeof schema>
+
+export const ISSUER = 'Spomen SSO'

@@ -4,11 +4,13 @@ import { OAuth2ServerModule } from '@boyuai/nestjs-oauth2-server'
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { Module, Provider } from '@nestjs/common'
 import { CqrsModule } from '@nestjs/cqrs'
+import { JwtModule } from '@nestjs/jwt'
 
 import { AccountRepository } from '../infrastructure/repository/account.repository'
 import { SessionRepository } from '../infrastructure/repository/session.repository'
 import { OAuth2Service } from '../infrastructure/oauth2/OAuth2.service'
 import { OAuth2Module } from '../infrastructure/oauth2/OAuth2.module'
+import { TokenService } from '../infrastructure/token/token.service'
 import { schema } from '../infrastructure/Config'
 
 import { AccountFactory } from '../domain/AccountFactory'
@@ -33,6 +35,10 @@ const infrastructure: Provider[] = [
     useClass: SessionRepository,
   },
   {
+    provide: InjectionToken.TOKEN_SERVICE,
+    useClass: TokenService,
+  },
+  {
     provide: APP_PIPE,
     useClass: ZodValidationPipe,
   },
@@ -50,6 +56,9 @@ const app = [SignUpHandler, AccountRegisteredHandler]
       service: SERVICES.OAUTH,
     }),
     CqrsModule,
+    JwtModule.register({
+      global: true,
+    }),
     OAuth2Module,
     OAuth2ServerModule.forRoot({
       imports: [OAuth2Module],
