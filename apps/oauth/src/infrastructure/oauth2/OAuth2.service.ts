@@ -14,6 +14,7 @@ import OAuth2Server, {
 } from 'oauth2-server'
 
 import { Injectable } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
 export class OAuth2Service
@@ -22,6 +23,8 @@ export class OAuth2Service
     AuthorizationCodeModel,
     RefreshTokenModel
 {
+  constructor(private readonly jwt: JwtService) {}
+
   getAccessToken(
     accessToken: string,
     callback?: Callback<Token>

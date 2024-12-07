@@ -17,8 +17,8 @@ export class AccountEntity extends RootEntity {
   email: string
   password: string
   pin_code?: string
-  roles: AccountRole[]
-  status: AccountStatus
+  roles?: AccountRole[]
+  status?: AccountStatus
   sessions?: SessionEntity[]
   meta?: AccountMeta
 }

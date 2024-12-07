@@ -2,14 +2,16 @@ import {
   ConfigService,
   createLogger,
   createTracer,
+  PrismaClientExceptionFilter,
   SERVICES,
 } from '@spomen/core'
 
-import { NestFactory } from '@nestjs/core'
+import { HttpAdapterHost, NestFactory } from '@nestjs/core'
 import { Logger } from '@nestjs/common'
 
 import { loadKeys } from './infrastructure/Keys'
 import { ENV } from './infrastructure/Config'
+
 import { AppModule } from './app/app.module'
 
 async function bootstrap() {
@@ -32,6 +34,9 @@ async function bootstrap() {
 
   config.set('ACCESS_PRIVATE_KEY', keys.privateKey)
   config.set('ACCESS_PUBLIC_KEY', keys.publicKey)
+
+  const { httpAdapter } = app.get(HttpAdapterHost)
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter))
 
   await app
     .listen(http_port)

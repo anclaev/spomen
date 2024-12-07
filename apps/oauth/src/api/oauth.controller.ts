@@ -1,5 +1,7 @@
 import { AuthorizationCode, Token } from 'oauth2-server'
-import { Controller, Post } from '@nestjs/common'
+import { Body, Controller, Post } from '@nestjs/common'
+import { ZodSerializerDto } from 'nestjs-zod'
+import { CommandBus } from '@nestjs/cqrs'
 import { of } from 'rxjs'
 
 import {
@@ -9,8 +11,20 @@ import {
   OAuth2Token,
 } from '@boyuai/nestjs-oauth2-server'
 
+import { SignUpCommand } from '../app/commands/SignUpCommand'
+import { AccountDto } from '../app/dtos/Account.dto'
+import { SignUpDto } from '../app/dtos/SignUp.dto'
+
 @Controller('oauth')
 export class OAuthController {
+  constructor(readonly commandBus: CommandBus) {}
+
+  @Post('sign-up')
+  @ZodSerializerDto(AccountDto)
+  async signUp(@Body() dto: SignUpDto): Promise<AccountDto> {
+    return await this.commandBus.execute(new SignUpCommand(dto))
+  }
+
   @Post('authorize')
   authorizeClient(
     @OAuth2Authorization()

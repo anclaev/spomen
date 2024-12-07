@@ -1,67 +1,98 @@
 import { PrismaProvider } from '@spomen/core'
 import { Inject } from '@nestjs/common'
+import { Writeable } from 'zod'
 
 import { InjectionToken } from '../../app/injection-token'
-import { AccountModel } from '../models/account.model'
+
+import { AccountProps, IAccount } from '../../domain/Account'
+import { AccountFactory } from '../../domain/AccountFactory'
+
+import { AccountEntity } from '../entities/account.entity'
 
 export interface IAccountRepository {
-  create: (account: Omit<AccountModel, 'sessions'>) => Promise<AccountModel>
-  findById: (id: string) => Promise<AccountModel | null>
-  findByUsername: (username: string) => Promise<AccountModel | null>
-  findByEmail: (email: string) => Promise<AccountModel | null>
-  update: (
-    id: string,
-    account: Omit<AccountModel, 'sessions'>
-  ) => Promise<AccountModel | null>
-  remove: (id) => Promise<boolean>
+  create: (account: IAccount) => Promise<IAccount>
+  findById: (id: string) => Promise<IAccount | null>
+  findByUsername: (username: string) => Promise<IAccount | null>
+  findByEmail: (email: string) => Promise<IAccount | null>
+  update: (id: string, account: IAccount) => Promise<IAccount | null>
 }
 
 export class AccountRepository implements IAccountRepository {
   constructor(
     @Inject(InjectionToken.PRISMA_PROVIDER)
-    private readonly prisma: PrismaProvider
+    private readonly prisma: PrismaProvider,
+    @Inject(AccountFactory)
+    private readonly factory: AccountFactory
   ) {}
 
-  async create(data: Omit<AccountModel, 'sessions'>): Promise<AccountModel> {
-    return (await this.prisma.account.create({
-      data,
-    })) as unknown as AccountModel
+  async create(account: IAccount): Promise<IAccount> {
+    const entity = this.modelToEntity(account)
+
+    const created = await this.prisma.account.create({
+      data: {
+        ...entity,
+        sessions: undefined,
+      },
+    })
+
+    return this.entityToModel(created as AccountEntity)
   }
 
-  async findById(id: string): Promise<AccountModel | null> {
-    const account = await this.prisma.account.findUnique({ where: { id } })
+  async update(id: string, account: IAccount): Promise<IAccount | null> {
+    const entity = this.modelToEntity(account)
 
-    return account ? (account as unknown as AccountModel) : null
+    const updated = await this.prisma.account.update({
+      where: {
+        id,
+      },
+      data: {
+        ...entity,
+        version: entity.version++,
+        sessions: undefined,
+      },
+    })
+
+    return updated ? this.entityToModel(updated as AccountEntity) : null
   }
 
-  async findByUsername(username: string): Promise<AccountModel | null> {
+  async findById(id: string): Promise<IAccount | null> {
     const account = await this.prisma.account.findUnique({
-      where: { username },
+      where: {
+        id,
+      },
     })
-
-    return account ? (account as unknown as AccountModel) : null
+    return account ? this.entityToModel(account as AccountEntity) : null
   }
 
-  async findByEmail(email: string): Promise<AccountModel | null> {
-    const account = await this.prisma.account.findUnique({ where: { email } })
-
-    return account ? (account as unknown as AccountModel) : null
-  }
-
-  async update(
-    id: string,
-    data: Omit<AccountModel, 'sessions'>
-  ): Promise<AccountModel | null> {
-    const updated = await this.prisma.account.update({ where: { id }, data })
-
-    return updated ? (updated as unknown as AccountModel) : null
-  }
-
-  async remove(id: string): Promise<boolean> {
-    const removed = await this.prisma.account.delete({
-      where: { id },
+  async findByEmail(email: string): Promise<IAccount | null> {
+    const account = await this.prisma.account.findUnique({
+      where: {
+        email,
+      },
     })
+    return account ? this.entityToModel(account as AccountEntity) : null
+  }
 
-    return !!removed
+  async findByUsername(username: string): Promise<IAccount | null> {
+    const account = await this.prisma.account.findUnique({
+      where: {
+        username,
+      },
+    })
+    return account ? this.entityToModel(account as AccountEntity) : null
+  }
+
+  private modelToEntity(model: IAccount): AccountEntity {
+    const props = JSON.parse(JSON.stringify(model)) as Writeable<AccountProps>
+
+    return <AccountEntity>{
+      ...props,
+    }
+  }
+
+  private entityToModel(entity: AccountEntity): IAccount {
+    return this.factory.reconstitute({
+      ...entity,
+    })
   }
 }
