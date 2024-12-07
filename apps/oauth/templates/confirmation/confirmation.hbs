@@ -1,0 +1,39 @@
+<html lang="ru">
+<head>
+  <title>Spomen</title>
+  <meta name="viewport" content="width=device-width; initial-scale=1">
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="confirmation.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <header><img src="logo.svg" height="50" width="85" alt="Spomen" /></header>
+  <main>
+    <h1>Добро пожаловать, <span class="username">{{username}}</span></h1>
+    <section class="welcome">
+      <span>Мы рады приветствовать тебя<br />в нашем проекте</span>
+      <img src="welcome-icon.svg" width="50" height="50" alt="Welcome" />
+    </section>
+    <section>
+      Нам необходимо подтвердить эту почту и<br />понять, что ты — <span class="person">реальная личность</span>
+    </section>
+    <a href="{{link}}" target='_blank' title="Подтвердить почту" class="confirm">Начать свою историю</a>
+    <section class="best-regards">
+      С уважением и благодарностью,<br><span class="best-regards__team">Spomen Team</span>
+    </section>
+  </main>
+  <footer>
+    <p>Ссылка действительна в течение часа</p>
+    <p>Если вы получили это письмо случайно — проигнорируйте его</p>
+    <a href="https://spomen.space/" title="Перейти к проекту">
+      <img src="footer-ref.svg" width="78" height="14" alt="spomen.space" />
+    </a>
+  </footer>
+</div>
+</body>
+</html>

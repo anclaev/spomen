@@ -17,6 +17,11 @@ module.exports = {
           output: 'keys',
           glob: '**/*',
         },
+        {
+          input: 'apps/**/templates',
+          output: 'templates',
+          glob: '**/*',
+        },
       ],
       optimization:
         process.env['NODE_ENV'] === 'production' ||
