@@ -24,7 +24,7 @@ export class MailerService {
       },
     })
     this.email = `Spomen <${config.get<string>('EMAIL_USER')}>`
-    this.domain = config.get<string>('DOMAIN')
+    this.domain = config.get<string>('DOMAIN')!
   }
 
   /**
@@ -43,8 +43,8 @@ export class MailerService {
       )
 
       return Handlebars.compile<T>(templateText, { strict: true })
-    } catch (e) {
-      return e
+    } catch (e: unknown) {
+      return e as Error
     }
   }
 

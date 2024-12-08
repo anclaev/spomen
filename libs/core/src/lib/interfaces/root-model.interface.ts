@@ -1,11 +1,4 @@
-export class RootModel {
-  id: string
-  version: number
-  created_at: Date
-  updated_at: Date
-}
-
-export class RootEntity extends RootModel {
+export class RootEntity {
   id: string
   version: number
   created_at: Date
