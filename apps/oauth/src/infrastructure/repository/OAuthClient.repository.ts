@@ -1,7 +1,7 @@
 import { PrismaProvider } from '@spomen/core'
 import { Inject } from '@nestjs/common'
-import moment from 'moment'
 import { Writeable } from 'zod'
+import moment from 'moment'
 
 import { InjectionToken } from '../../app/injection-token'
 
@@ -46,7 +46,7 @@ export class OAuthClientRepository implements IOAuthClientRepository {
       data: {
         ...entity,
         sessions: undefined,
-        version: entity.version++,
+        version: entity.version + 1,
         updated_at: moment().toDate(),
       },
     })

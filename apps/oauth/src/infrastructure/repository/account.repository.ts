@@ -49,7 +49,7 @@ export class AccountRepository implements IAccountRepository {
       data: {
         ...entity,
         sessions: undefined,
-        version: entity.version++,
+        version: entity.version + 1,
         updated_at: moment().toDate(),
       },
     })
