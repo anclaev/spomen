@@ -1,0 +1,208 @@
+{
+  "name": "@spomen/oauth",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/oauth/src",
+  "projectType": "application",
+  "authors": [
+    "Artem Samarin <iahugo@yandex.ru> (https://t.me/anclaev)"
+  ],
+  "copyright": "anclaev",
+  "description": " Spomen OAuth service",
+  "tags": [
+    "@spomen/auth"
+  ],
+  "implicitDependencies": [
+    "@spomen/core"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "dependsOn": [
+        "prisma-generate"
+      ],
+      "defaultConfiguration": "development",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/oauth",
+        "main": "apps/oauth/src/main.ts",
+        "tsConfig": "apps/oauth/tsconfig.app.json",
+        "webpackConfig": "apps/oauth/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+        },
+        "staging": {
+        },
+        "production": {
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "@spomen/oauth:build",
+        "runBuildTargetDependencies": false,
+        "inspect": false
+      },
+      "target": "node",
+      "compiler": "tsc",
+      "configurations": {
+        "development": {
+          "buildTarget": "@spomen/oauth:build:development"
+        },
+        "staging": {
+          "buildTarget": "@spomen/oauth:build:staging"
+        },
+        "production": {
+          "buildTarget": "@spomen/oauth:build:production"
+        }
+      }
+    },
+    "test": {
+      "dependsOn": ["prisma-generate"]
+    },
+    "container": {
+      "executor": "@nx-tools/nx-container:build",
+      "defaultConfiguration": "local",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "load": true,
+        "engine": "docker",
+        "build-args": [
+          "NODE_ENV=local"
+        ]
+      },
+      "configurations": {
+        "local": {
+          "push": false,
+          "load": true,
+          "build-args": [
+            "NODE_ENV=local"
+          ],
+          "tags": [
+            "anclaev/spomen-oauth:local"
+          ]
+        },
+        "development": {
+          "push": false,
+          "load": true,
+          "build-args": [
+            "NODE_ENV=development"
+          ],
+          "tags": [
+            "anclaev/spomen-oauth:dev"
+          ]
+        },
+        "staging": {
+          "push": true,
+          "cache-from": [
+            "type=gha"
+          ],
+          "cache-to": [
+            "type=gha,mode=max"
+          ],
+          "build-args": [
+            "NODE_ENV=staging"
+          ],
+          "tags": [
+            "anclaev/spomen-oauth:staging"
+          ]
+        },
+        "production": {
+          "push": true,
+          "cache-from": [
+            "type=gha"
+          ],
+          "cache-to": [
+            "type=gha,mode=max"
+          ],
+          "build-args": [
+            "NODE_ENV=production"
+          ],
+          "tags": [
+            "anclaev/spomen-oauth:latest"
+          ]
+        }
+      }
+    },
+    "prisma-deploy": {
+      "executor": "@nx-tools/nx-prisma:deploy",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "prisma-format": {
+      "executor": "@nx-tools/nx-prisma:format",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "prisma-generate": {
+      "executor": "@nx-tools/nx-prisma:generate",
+      "options": {
+        "schema": "merged-schema.prisma"
+      }
+    },
+    "prisma-migrate": {
+      "executor": "@nx-tools/nx-prisma:migrate",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "prisma-pull": {
+      "executor": "@nx-tools/nx-prisma:pull",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "prisma-push": {
+      "executor": "@nx-tools/nx-prisma:push",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "prisma-reset": {
+      "executor": "@nx-tools/nx-prisma:reset",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "prisma-resolve": {
+      "executor": "@nx-tools/nx-prisma:resolve",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "prisma-seed": {
+      "executor": "@nx-tools/nx-prisma:seed",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "prisma-status": {
+      "executor": "@nx-tools/nx-prisma:status",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "prisma-studio": {
+      "executor": "@nx-tools/nx-prisma:studio",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "prisma-validate": {
+      "executor": "@nx-tools/nx-prisma:validate",
+      "options": {
+        "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    }
+  }
+}

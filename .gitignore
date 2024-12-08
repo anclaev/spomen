@@ -42,3 +42,5 @@ Thumbs.db
 
 .env.*
 merged-schema.prisma
+**/keys/*.key
+**/keys/*.pub

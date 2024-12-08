@@ -10,4 +10,9 @@ export class ConfigService extends Config {
   env<T, V = string>(key: keyof T): V | undefined {
     return this.get<V>(key as string)
   }
+
+  get isProduction(): boolean {
+    const NODE_ENV = this.get('NODE_ENV')
+    return NODE_ENV === 'production' || NODE_ENV === 'staging'
+  }
 }
