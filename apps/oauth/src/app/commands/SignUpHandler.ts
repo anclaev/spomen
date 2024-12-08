@@ -21,6 +21,8 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand, IAccount> {
   ) {}
 
   async execute({ dto }: SignUpCommand): Promise<IAccount> {
+    // TODO: Добавить проверку клиента
+
     dto.password = await argon2.hash(dto.password)
 
     const account = await this.accountFactory.create({
@@ -31,7 +33,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand, IAccount> {
 
     const registeredAccount = await this.account.create(account)
 
-    registeredAccount.create()
+    registeredAccount.create(dto.client_id)
     registeredAccount.commit()
 
     return registeredAccount

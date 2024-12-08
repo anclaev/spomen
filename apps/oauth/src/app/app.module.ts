@@ -1,5 +1,11 @@
+import {
+  ConfigModule,
+  MailerService,
+  PrismaProvider,
+  SERVICES,
+} from '@spomen/core'
+
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod'
-import { ConfigModule, PrismaProvider, SERVICES } from '@spomen/core'
 import { OAuth2ServerModule } from '@boyuai/nestjs-oauth2-server'
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { Module, Provider } from '@nestjs/common'
@@ -11,12 +17,15 @@ import { SessionRepository } from '../infrastructure/repository/session.reposito
 import { OAuth2Service } from '../infrastructure/oauth2/OAuth2.service'
 import { OAuth2Module } from '../infrastructure/oauth2/OAuth2.module'
 import { TokenService } from '../infrastructure/token/token.service'
+import { EmailService } from '../infrastructure/email/email.service'
 import { schema } from '../infrastructure/Config'
 
 import { AccountFactory } from '../domain/AccountFactory'
 
-import { AccountRegisteredHandler } from './handlers/AccountRegisteredHandler'
+import { AccountRegisteredHandler } from './events/AccountRegisteredHandler'
+import { ConfirmEmailHandler } from './commands/ConfirmEmailHandler'
 import { SignUpHandler } from './commands/SignUpHandler'
+
 import { InjectionToken } from './injection-token'
 
 import { OAuthController } from '../api/oauth.controller'
@@ -39,6 +48,14 @@ const infrastructure: Provider[] = [
     useClass: TokenService,
   },
   {
+    provide: InjectionToken.MAILER_SERVICE,
+    useClass: MailerService,
+  },
+  {
+    provide: InjectionToken.EMAIL_SERVICE,
+    useClass: EmailService,
+  },
+  {
     provide: APP_PIPE,
     useClass: ZodValidationPipe,
   },
@@ -47,7 +64,7 @@ const infrastructure: Provider[] = [
 
 const domain = [AccountFactory]
 
-const app = [SignUpHandler, AccountRegisteredHandler]
+const app = [SignUpHandler, AccountRegisteredHandler, ConfirmEmailHandler]
 
 @Module({
   imports: [

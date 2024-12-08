@@ -17,17 +17,36 @@ export const loadKeys = (): RSAKeys | Error => {
   }
 }
 
-export interface ITokenPayload {
+export interface ITokenWithoutPayload {
+  iat: number
+  exp: number
+  iss: string
+  sub: string
+}
+
+export interface IAccessTokenPayload {
   client_id: string
   account_id: string
   username: string
   email: string
 }
 
-export interface IRefreshPayload extends ITokenPayload {
+export interface IAccessToken
+  extends ITokenWithoutPayload,
+    IAccessTokenPayload {}
+
+export interface IRefreshTokenPayload extends IAccessTokenPayload {
   token_id: string
 }
 
-export interface IConfirmPayload extends ITokenPayload {
+export interface IRefreshToken
+  extends ITokenWithoutPayload,
+    IRefreshTokenPayload {}
+
+export interface IConfirmTokenPayload extends IAccessTokenPayload {
   version: number
 }
+
+export interface IConfirmToken
+  extends ITokenWithoutPayload,
+    IConfirmTokenPayload {}

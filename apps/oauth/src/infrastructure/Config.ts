@@ -71,6 +71,18 @@ export const schema = defaultConfigSchema.extend({
     .transform(Number),
   ACCESS_PRIVATE_KEY: z.string().optional(),
   ACCESS_PUBLIC_KEY: z.string().optional(),
+  TEST_EMAIL: process.env.NODE_ENV
+    ? process.env.NODE_ENV === 'local' ||
+      process.env.NODE_ENV === 'test' ||
+      process.env.NODE_ENV === 'development'
+      ? z
+          .string({ message: 'Некорректная почта для тестирования' })
+          .email({ message: 'Некорректная почта для тестирования' })
+      : z
+          .string({ message: 'Некорректная почта для тестирования' })
+          .email({ message: 'Некорректная почта для тестирования' })
+          .optional()
+    : undefined,
 })
 
 export type ENV = z.infer<typeof schema>

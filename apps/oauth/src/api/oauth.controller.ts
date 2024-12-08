@@ -1,5 +1,15 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Redirect,
+  UnauthorizedException,
+} from '@nestjs/common'
+
 import { AuthorizationCode, Token } from 'oauth2-server'
-import { Body, Controller, Post } from '@nestjs/common'
 import { ZodSerializerDto } from 'nestjs-zod'
 import { CommandBus } from '@nestjs/cqrs'
 import { of } from 'rxjs'
@@ -11,7 +21,12 @@ import {
   OAuth2Token,
 } from '@boyuai/nestjs-oauth2-server'
 
+import { CONFIRM_EMAIL_STATUS } from '../infrastructure/Enums'
+
+import { ConfirmEmailCommand } from '../app/commands/ConfirmEmailCommand'
 import { SignUpCommand } from '../app/commands/SignUpCommand'
+
+import { ClientIdQueryDto } from '../app/dtos/ClientIdQuery.dto'
 import { AccountDto } from '../app/dtos/Account.dto'
 import { SignUpDto } from '../app/dtos/SignUp.dto'
 
@@ -21,8 +36,44 @@ export class OAuthController {
 
   @Post('sign-up')
   @ZodSerializerDto(AccountDto)
-  async signUp(@Body() dto: SignUpDto): Promise<AccountDto> {
-    return await this.commandBus.execute(new SignUpCommand(dto))
+  async signUp(
+    @Body() dto: SignUpDto,
+    @Query() query: ClientIdQueryDto
+  ): Promise<AccountDto> {
+    return await this.commandBus.execute(
+      new SignUpCommand({
+        username: dto.username,
+        email: dto.email,
+        password: dto.password,
+        client_id: query.client_id,
+      })
+    )
+  }
+
+  @Get('confirm/:token')
+  @Redirect('https://spomen.space', 302)
+  async confirmEmail(@Param('token') token: string) {
+    if (!token || token.length < 5) {
+      throw new UnauthorizedException()
+    }
+
+    const confirmStatus: CONFIRM_EMAIL_STATUS = await this.commandBus.execute(
+      new ConfirmEmailCommand({ token })
+    )
+
+    switch (confirmStatus) {
+      case CONFIRM_EMAIL_STATUS.INVALID:
+        throw new UnauthorizedException()
+      case CONFIRM_EMAIL_STATUS.EXPIRED:
+        // TODO: Добавить редирект на клиент с параметров устаревшей ссылки на подтверждение почты
+        return { url: 'https://www.bing.com' }
+      case CONFIRM_EMAIL_STATUS.ALREADY_CONFIRMED:
+        // TODO: Добавить редирект на клиент
+        return { url: 'https://google.com' }
+      case CONFIRM_EMAIL_STATUS.SUCCESS:
+        // TODO: Добавить редирект на клиент с параметром успешного подтверждения почты
+        return { url: 'https://yandex.ru' }
+    }
   }
 
   @Post('authorize')

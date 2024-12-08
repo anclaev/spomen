@@ -7,6 +7,7 @@ export const defaultConfigSchema = z.object({
   NODE_ENV: z.enum(['production', 'development', 'staging', 'local', 'test'], {
     message: 'Окружение не установлено',
   }),
+  DOMAIN: z.string({ message: 'Домен сервиса не установлен' }),
   HOST: z.string({ message: 'Хост сервиса не установлен' }),
   PORT: z
     .string({ message: PORT_ERROR_NOT_SET })

@@ -5,6 +5,7 @@ import { AccountMeta } from '../infrastructure/entities/account.entity'
 
 import { AccountRegisteredEvent } from './events/AccountRegisteredEvent'
 import { SessionEntity } from '../infrastructure/entities/session.entity'
+import moment from 'moment'
 
 export type AccountEssentialProps = Readonly<
   Required<{
@@ -31,22 +32,36 @@ export type AccountOptionalProps = Readonly<
 export type AccountProps = AccountEssentialProps & AccountOptionalProps
 
 export interface IAccount extends AggregateRoot {
-  create(): void
+  create(client_id: string): void
+  getVersion(): number
+  getStatus(): AccountStatus
+  getEmail(): string
+  getUsername(): string
+  getId(): string
+  changeStatus(status: AccountStatus): void
+  confirm(): void
 }
 
 export class Account extends AggregateRoot implements IAccount {
   private readonly id?: string
-  private readonly username: string
-  private readonly email: string
-  private readonly password: string
-  private readonly version?: number
-  private readonly pin_code?: string
-  private readonly roles?: AccountRole[]
-  private readonly status?: AccountStatus
-  private readonly meta?: AccountMeta
+  private username: string
+  private email: string
+  private password: string
+  private version?: number
+  private pin_code?: string
+  private roles?: AccountRole[]
+  private status?: AccountStatus
   private readonly created_at?: Date
   private readonly updated_at?: Date
   private readonly sessions?: SessionEntity[]
+  private meta?: AccountMeta = {
+    confirmed_at: null,
+    blocked_at: null,
+    blocked_by: null,
+    blocked_msg: null,
+    password_updated_at: null,
+    removed_at: null,
+  }
 
   constructor(props: AccountProps) {
     super()
@@ -54,7 +69,38 @@ export class Account extends AggregateRoot implements IAccount {
     Object.assign(this, props)
   }
 
-  create() {
-    this.apply(new AccountRegisteredEvent(this.id))
+  getVersion() {
+    return this.version
+  }
+
+  getStatus() {
+    return this.status
+  }
+
+  getEmail(): string {
+    return this.email
+  }
+
+  getId(): string {
+    return this.id
+  }
+
+  getUsername(): string {
+    return this.username
+  }
+
+  changeStatus(status: AccountStatus) {
+    this.status = status
+  }
+
+  confirm() {
+    if (this.status === 'CREATED' || this.status === 'PENDING') {
+      this.status = 'COMFIRMED'
+      this.meta.confirmed_at = moment().toISOString()
+    }
+  }
+
+  create(client_id: string) {
+    this.apply(new AccountRegisteredEvent(client_id, this))
   }
 }

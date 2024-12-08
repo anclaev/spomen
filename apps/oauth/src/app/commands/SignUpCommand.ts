@@ -1,7 +1,8 @@
 import { ICommand } from '@nestjs/cqrs'
 
-import { SignUpDto } from '../dtos/SignUp.dto'
+import { ClientIdQueryDtoType } from '../dtos/ClientIdQuery.dto'
+import { SignUpDtoType } from '../dtos/SignUp.dto'
 
 export class SignUpCommand implements ICommand {
-  constructor(readonly dto: SignUpDto) {}
+  constructor(readonly dto: SignUpDtoType & ClientIdQueryDtoType) {}
 }

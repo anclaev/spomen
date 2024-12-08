@@ -2,7 +2,11 @@ import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt'
 import { ConfigService } from '@spomen/core'
 import { Injectable } from '@nestjs/common'
 
-import { IConfirmPayload, IRefreshPayload, ITokenPayload } from './Tokens'
+import {
+  IAccessTokenPayload,
+  IConfirmTokenPayload,
+  IRefreshTokenPayload,
+} from './Tokens'
 
 import { TOKEN_TYPES } from '../Enums'
 import { ENV, ISSUER } from '../Config'
@@ -15,7 +19,7 @@ export class TokenService {
   ) {}
 
   async generateToken(
-    payload: ITokenPayload | IRefreshPayload | IConfirmPayload,
+    payload: IAccessTokenPayload | IRefreshTokenPayload | IConfirmTokenPayload,
     type: TOKEN_TYPES
   ): Promise<string> {
     const options: JwtSignOptions = {
@@ -55,7 +59,10 @@ export class TokenService {
     }
   }
 
-  async verifyToken(token: string, type: TOKEN_TYPES): Promise<any> {
+  async verifyToken<T extends object>(
+    token: string,
+    type: TOKEN_TYPES
+  ): Promise<T> {
     const options: JwtVerifyOptions = {
       issuer: ISSUER,
       algorithms: ['HS256'],
@@ -66,25 +73,21 @@ export class TokenService {
         return await this.jwt.verifyAsync(token, {
           ...options,
           algorithms: ['RS256'],
-          maxAge: this.config.env<ENV>('ACCESS_TOKEN_EXPIRATION'),
           publicKey: this.config.env<ENV>('ACCESS_PUBLIC_KEY'),
         })
       case TOKEN_TYPES.REFRESH:
         return await this.jwt.verifyAsync(token, {
           ...options,
-          maxAge: this.config.env<ENV>('REFRESH_TOKEN_EXPIRATION'),
           secret: this.config.env<ENV>('REFRESH_TOKEN_SECRET'),
         })
       case TOKEN_TYPES.CONFIRMATION:
         return await this.jwt.verifyAsync(token, {
           ...options,
-          maxAge: this.config.env<ENV>('CONFIRMATION_TOKEN_EXPIRATION'),
           secret: this.config.env<ENV>('CONFIRMATION_TOKEN_SECRET'),
         })
       case TOKEN_TYPES.RESET:
         return await this.jwt.verifyAsync(token, {
           ...options,
-          maxAge: this.config.env<ENV>('RESET_TOKEN_EXPIRATION'),
           secret: this.config.env<ENV>('RESET_TOKEN_SECRET'),
         })
     }

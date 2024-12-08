@@ -13,4 +13,5 @@ const SignUpSchema = z.object({
     .min(8, 'Пароль не может быть менее 8 символов'),
 })
 
+export type SignUpDtoType = z.infer<typeof SignUpSchema>
 export class SignUpDto extends createZodDto(SignUpSchema) {}

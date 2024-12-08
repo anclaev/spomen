@@ -61,6 +61,7 @@ export class AccountRepository implements IAccountRepository {
         id,
       },
     })
+
     return account ? this.entityToModel(account as AccountEntity) : null
   }
 
