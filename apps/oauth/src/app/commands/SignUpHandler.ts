@@ -27,8 +27,6 @@ export class SignUpHandler
   ) {}
 
   async execute({ dto }: SignUpCommand): Promise<SignUpResult> {
-    // TODO: Добавить проверку клиента
-
     const client = await this.client.findById(dto.client_id!)
 
     if (!client) {
