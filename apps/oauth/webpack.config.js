@@ -18,7 +18,7 @@ module.exports = {
           glob: '**/*',
         },
         {
-          input: 'apps/**/templates',
+          input: 'apps/oauth/templates',
           output: 'templates',
           glob: '**/*',
         },
