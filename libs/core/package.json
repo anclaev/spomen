@@ -20,6 +20,8 @@
     "@opentelemetry/semantic-conventions": "^1.28.0",
     "@opentelemetry/resources": "^1.29.0",
     "@opentelemetry/sdk-node": "^0.56.0",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.3",
+    "nodemailer": "^6.9.16",
+    "handlebars": "^4.7.8"
   }
 }
