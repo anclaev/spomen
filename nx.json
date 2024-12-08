@@ -29,7 +29,7 @@
     },
     {
       "plugin": "@nx/jest/plugin",
-      "exclude": ["e2e/**/*"],
+      "exclude": ["e2e/**/*", "apps/oauth-e2e/**/*"],
       "options": {
         "targetName": "test",
         "coverage": true,

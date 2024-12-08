@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountRole {
+  PUBLIC
+  ADMIN
+}
+
+enum AccountStatus {
+  CREATED
+  PENDING
+  COMFIRMED
+  BLOCKED
+  REMOVED
+}
+
+enum SessionStatus {
+  ACTIVE
+  EXPIRED
+}
+
+model Account {
+  id         String        @id @default(uuid())
+  version    Int           @default(0)
+  username   String        @unique
+  email      String        @unique
+  password   String
+  pin_code   String?
+  roles      AccountRole[] @default([PUBLIC])
+  status     AccountStatus @default(CREATED)
+  sessions   Session[]     @relation("AccountSession")
+  meta       Json?         @db.Json
+  created_at DateTime      @default(now()) @db.Timestamp()
+  updated_at DateTime      @default(now()) @db.Timestamp()
+
+  @@map("accounts")
+}
+
+model Session {
+  id            String        @id @default(uuid())
+  version       Int           @default(0)
+  client        OAuthClient   @relation("OAuthClientSessions", fields: [client_id], references: [id])
+  client_id     String
+  refresh_token String
+  status        SessionStatus @default(ACTIVE)
+  account       Account       @relation("AccountSession", fields: [account_id], references: [id])
+  account_id    String
+  meta          Json?         @db.Json
+  created_at    DateTime      @default(now()) @db.Timestamp()
+  updated_at    DateTime      @default(now()) @db.Timestamp()
+
+  @@map("sessions")
+}
+
+model OAuthClient {
+  id      String   @id @default(uuid())
+  version Int      @default(0)
+  name    String
+  domain  String
+  scopes  String[] @default([])
+
+  sessions Session[] @relation("OAuthClientSessions")
+
+  created_at DateTime @default(now()) @db.Timestamp()
+  updated_at DateTime @default(now()) @db.Timestamp()
+
+  @@map("oauth_clients")
+}
