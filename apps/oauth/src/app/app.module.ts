@@ -12,6 +12,7 @@ import { Module, Provider } from '@nestjs/common'
 import { CqrsModule } from '@nestjs/cqrs'
 import { JwtModule } from '@nestjs/jwt'
 
+import { OAuthClientRepository } from '../infrastructure/repository/OAuthClient.repository'
 import { AccountRepository } from '../infrastructure/repository/account.repository'
 import { SessionRepository } from '../infrastructure/repository/session.repository'
 import { OAuth2Service } from '../infrastructure/oauth2/OAuth2.service'
@@ -20,6 +21,7 @@ import { TokenService } from '../infrastructure/token/token.service'
 import { EmailService } from '../infrastructure/email/email.service'
 import { schema } from '../infrastructure/Config'
 
+import { OAuthClientFactory } from '../domain/OAuthClientFactory'
 import { AccountFactory } from '../domain/AccountFactory'
 
 import { AccountRegisteredHandler } from './events/AccountRegisteredHandler'
@@ -34,6 +36,10 @@ const infrastructure: Provider[] = [
   {
     provide: InjectionToken.PRISMA_PROVIDER,
     useClass: PrismaProvider,
+  },
+  {
+    provide: InjectionToken.OAUTH_CLIENT_REPOSITORY,
+    useClass: OAuthClientRepository,
   },
   {
     provide: InjectionToken.ACCOUNT_REPOSITORY,
@@ -62,7 +68,7 @@ const infrastructure: Provider[] = [
   { provide: APP_INTERCEPTOR, useClass: ZodSerializerInterceptor },
 ]
 
-const domain = [AccountFactory]
+const domain = [AccountFactory, OAuthClientFactory]
 
 const app = [SignUpHandler, AccountRegisteredHandler, ConfirmEmailHandler]
 

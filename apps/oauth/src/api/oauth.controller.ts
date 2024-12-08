@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Param,
   Post,
@@ -21,14 +22,16 @@ import {
   OAuth2Token,
 } from '@boyuai/nestjs-oauth2-server'
 
-import { CONFIRM_EMAIL_STATUS } from '../infrastructure/Enums'
+import { CONFIRM_EMAIL_STATUS, SIGN_UP_STATUS } from '../infrastructure/Enums'
+
+import { IAccount } from '../domain/Account'
 
 import { ConfirmEmailCommand } from '../app/commands/ConfirmEmailCommand'
 import { SignUpCommand } from '../app/commands/SignUpCommand'
 
 import { ClientIdQueryDto } from '../app/dtos/ClientIdQuery.dto'
+import { SignUpDto, SignUpResult } from '../app/dtos/SignUp.dto'
 import { AccountDto } from '../app/dtos/Account.dto'
-import { SignUpDto } from '../app/dtos/SignUp.dto'
 
 @Controller('oauth')
 export class OAuthController {
@@ -39,8 +42,8 @@ export class OAuthController {
   async signUp(
     @Body() dto: SignUpDto,
     @Query() query: ClientIdQueryDto
-  ): Promise<AccountDto> {
-    return await this.commandBus.execute(
+  ): Promise<IAccount> {
+    const result = await this.commandBus.execute<SignUpCommand, SignUpResult>(
       new SignUpCommand({
         username: dto.username,
         email: dto.email,
@@ -48,6 +51,12 @@ export class OAuthController {
         client_id: query.client_id,
       })
     )
+
+    if (result.status !== SIGN_UP_STATUS.SUCCESS || !result.account) {
+      throw new ForbiddenException()
+    }
+
+    return result.account
   }
 
   @Get('confirm/:token')

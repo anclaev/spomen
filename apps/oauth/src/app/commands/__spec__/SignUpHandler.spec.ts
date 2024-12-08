@@ -2,9 +2,14 @@ import { Provider } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 import { v4 } from 'uuid'
 
-import { AccountRepository } from '../../../infrastructure/repository/account.repository'
-
 import { AccountFactory } from '../../../domain/AccountFactory'
+
+import { OAuthClientRepository } from '../../../infrastructure/repository/OAuthClient.repository'
+import { AccountRepository } from '../../../infrastructure/repository/account.repository'
+import {
+  OAUTH_CLIENT_SCOPES,
+  SIGN_UP_STATUS,
+} from '../../../infrastructure/Enums'
 
 import { SignUpHandler } from '../SignUpHandler'
 import { SignUpCommand } from '../SignUpCommand'
@@ -13,12 +18,18 @@ import { InjectionToken } from '../../injection-token'
 
 describe('SignUpHandler', () => {
   let handler: SignUpHandler
-  let repository: AccountRepository
+  let accountRepository: AccountRepository
+  let OAuthClientRepository: OAuthClientRepository
   let factory: AccountFactory
 
   beforeEach(async () => {
-    const repoProvider: Provider = {
+    const accountRepo: Provider = {
       provide: InjectionToken.ACCOUNT_REPOSITORY,
+      useValue: {},
+    }
+
+    const clientRepo: Provider = {
+      provide: InjectionToken.OAUTH_CLIENT_REPOSITORY,
       useValue: {},
     }
 
@@ -27,34 +38,53 @@ describe('SignUpHandler', () => {
       useValue: {},
     }
 
-    const providers: Provider[] = [repoProvider, factoryProvider, SignUpHandler]
+    const providers: Provider[] = [
+      accountRepo,
+      clientRepo,
+      factoryProvider,
+      SignUpHandler,
+    ]
 
     const testModule = await Test.createTestingModule({ providers }).compile()
 
     handler = testModule.get(SignUpHandler)
-    repository = testModule.get(InjectionToken.ACCOUNT_REPOSITORY)
     factory = testModule.get(AccountFactory)
+    accountRepository = testModule.get(InjectionToken.ACCOUNT_REPOSITORY)
+    OAuthClientRepository = testModule.get(
+      InjectionToken.OAUTH_CLIENT_REPOSITORY
+    )
   })
 
   it('should execute', async () => {
     const account = { create: jest.fn(), commit: jest.fn() }
-    const client_id = v4()
+
+    const client = {
+      id: v4(),
+      getScopes: jest.fn().mockReturnValue([OAUTH_CLIENT_SCOPES.ROOT]),
+    }
 
     factory.create = jest.fn().mockReturnValue(account)
-    repository.create = jest.fn().mockResolvedValue(account)
+    accountRepository.create = jest.fn().mockResolvedValue(account)
+    OAuthClientRepository.findById = jest.fn().mockResolvedValue(client)
 
     const command = new SignUpCommand({
       email: 'test@mail.ru',
       username: 'test',
       password: 'password',
-      client_id,
+      client_id: client.id,
     })
 
-    await expect(handler.execute(command)).resolves.toEqual(account)
+    await expect(handler.execute(command)).resolves.toEqual({
+      account,
+      status: SIGN_UP_STATUS.SUCCESS,
+    })
     expect(account.create).toBeCalledTimes(1)
-    expect(account.create).toBeCalledWith(client_id)
-    expect(repository.create).toBeCalledTimes(1)
-    expect(repository.create).toBeCalledWith(account)
+    expect(account.create).toBeCalledWith(client.id)
+    expect(OAuthClientRepository.findById).toBeCalledTimes(1)
+    expect(OAuthClientRepository.findById).toBeCalledWith(client.id)
+    expect(accountRepository.create).toBeCalledTimes(1)
+    expect(accountRepository.create).toBeCalledWith(account)
     expect(account.commit).toBeCalledTimes(1)
+    expect(client.getScopes).toBeCalledTimes(1)
   })
 })

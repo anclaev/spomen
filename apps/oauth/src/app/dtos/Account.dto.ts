@@ -6,12 +6,9 @@ const AccountSchema = z.object({
   version: z.any(),
   username: z.any(),
   email: z.any(),
-  status: z.any(),
   roles: z.any(),
-  meta: z.any(),
   created_at: z.any(),
   updated_at: z.any(),
-  sessions: z.any().optional(),
 })
 
 export class AccountDto extends createZodDto(AccountSchema) {}

@@ -1,5 +1,6 @@
 export enum InjectionToken {
   PRISMA_PROVIDER = 'PrismaProvider',
+  OAUTH_CLIENT_REPOSITORY = 'OAuthClientRepository',
   ACCOUNT_REPOSITORY = 'AccountRepository',
   SESSION_REPOSITORY = 'SessionRepository',
   TOKEN_SERVICE = 'TokenService',

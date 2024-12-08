@@ -3,6 +3,7 @@ import { EventPublisher } from '@nestjs/cqrs'
 import { Inject } from '@nestjs/common'
 
 import { AccountMeta } from '../infrastructure/entities/account.entity'
+
 import { Account, AccountProps, IAccount } from './Account'
 
 type CreateAccountOptions = {
