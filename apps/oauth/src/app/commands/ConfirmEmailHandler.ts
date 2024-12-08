@@ -53,7 +53,6 @@ export class ConfirmEmailHandler
 
       return CONFIRM_EMAIL_STATUS.SUCCESS
     } catch (e: unknown) {
-      console.log(e)
       if (e instanceof JsonWebTokenError && e.name === 'TokenExpiredError') {
         return CONFIRM_EMAIL_STATUS.EXPIRED
       }

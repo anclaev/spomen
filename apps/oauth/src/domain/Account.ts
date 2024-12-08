@@ -1,11 +1,11 @@
 import { AccountRole, AccountStatus } from '@prisma/client'
 import { AggregateRoot } from '@nestjs/cqrs'
+import moment from 'moment'
 
 import { AccountMeta } from '../infrastructure/entities/account.entity'
 
 import { AccountRegisteredEvent } from './events/AccountRegisteredEvent'
 import { SessionEntity } from '../infrastructure/entities/session.entity'
-import moment from 'moment'
 
 export type AccountEssentialProps = Readonly<
   Required<{
@@ -52,7 +52,7 @@ export class Account extends AggregateRoot implements IAccount {
   private roles?: AccountRole[]
   private status?: AccountStatus
   private readonly created_at?: Date
-  private readonly updated_at?: Date
+  private updated_at?: Date
   private readonly sessions?: SessionEntity[]
   private meta?: AccountMeta = {
     confirmed_at: null,

@@ -1,5 +1,6 @@
 import { PrismaProvider } from '@spomen/core'
 import { Inject } from '@nestjs/common'
+import moment from 'moment/moment'
 import { Writeable } from 'zod'
 
 import { InjectionToken } from '../../app/injection-token'
@@ -47,8 +48,9 @@ export class AccountRepository implements IAccountRepository {
       },
       data: {
         ...entity,
-        version: entity.version++,
         sessions: undefined,
+        version: entity.version + 1,
+        updated_at: moment().toDate(),
       },
     })
 

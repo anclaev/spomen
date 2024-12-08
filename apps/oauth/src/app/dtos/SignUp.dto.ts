@@ -1,6 +1,10 @@
 import { createZodDto } from 'nestjs-zod'
 import { z } from 'zod'
 
+import { IAccount } from '../../domain/Account'
+
+import { SIGN_UP_STATUS } from '../../infrastructure/Enums'
+
 const SignUpSchema = z.object({
   username: z
     .string({ message: 'Логин обязателен' })
@@ -15,3 +19,8 @@ const SignUpSchema = z.object({
 
 export type SignUpDtoType = z.infer<typeof SignUpSchema>
 export class SignUpDto extends createZodDto(SignUpSchema) {}
+
+export type SignUpResult = {
+  account?: IAccount
+  status: SIGN_UP_STATUS
+}
