@@ -37,6 +37,8 @@ testem.log
 .DS_Store
 Thumbs.db
 
+.yarn/unplugged
+
 .nx/cache
 .nx/workspace-data
 
