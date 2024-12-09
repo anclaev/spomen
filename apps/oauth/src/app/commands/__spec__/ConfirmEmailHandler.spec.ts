@@ -6,14 +6,17 @@ import { TokenService } from '../../../infrastructure/token/token.service'
 
 import { ConfirmEmailHandler } from '../ConfirmEmailHandler'
 
-import { InjectionToken } from '../../injection-token'
-import { ConfirmEmailCommand } from '../ConfirmEmailCommand'
 import { IConfirmToken } from '../../../infrastructure/token/Tokens'
+import { ConfirmEmailCommand } from '../ConfirmEmailCommand'
+import { InjectionToken } from '../../injection-token'
+
 import { v4 } from 'uuid'
+
 import {
   CONFIRM_EMAIL_STATUS,
   TOKEN_TYPES,
 } from '../../../infrastructure/Enums'
+
 import { TokenExpiredError } from '@nestjs/jwt'
 
 describe('ConfirmEmailHandler', () => {
@@ -55,18 +58,18 @@ describe('ConfirmEmailHandler', () => {
     }
 
     const account_id = v4()
-    const client_id = v4()
 
     const confirmToken: IConfirmToken = {
-      email: 'test@mail.ru',
-      account_id,
-      client_id,
-      username: 'test',
       version: 0,
       exp: 111111,
       iat: 111111,
       iss: 'test',
       sub: account_id,
+      user: {
+        email: 'test@mail.ru',
+        username: 'test',
+        id: account_id,
+      },
     }
 
     const confirmJwtToken =

@@ -1,6 +1,6 @@
 {
-  "name": "@spomen/oauth-e2e",
+  "name": "oauth-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "implicitDependencies": ["@spomen/oauth"]
+  "implicitDependencies": ["oauth"]
 }

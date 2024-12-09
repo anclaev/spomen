@@ -14,6 +14,17 @@ export const schema = defaultConfigSchema.extend({
     .min(4, { message: `${PORT_INVALID} gRPC` })
     .max(5, { message: `${PORT_INVALID} gRPC` })
     .transform(Number),
+  OAUTH_TOKEN_SECRET: z.string({
+    message: 'Секрет OAuth-токена не установлен',
+  }),
+  OAUTH_TOKEN_EXPIRATION: z
+    .string({
+      message: 'Время жизни OAuth-токена не установлено',
+    })
+    .regex(/^\d+$/, {
+      message: `${EXPIRATION_INVALID}, OAuth-токена`,
+    })
+    .transform(Number),
   RESET_TOKEN_SECRET: z.string({
     message: 'Секрет токена восстановления не установлен',
   }),
@@ -71,6 +82,14 @@ export const schema = defaultConfigSchema.extend({
     .transform(Number),
   ACCESS_PRIVATE_KEY: z.string().optional(),
   ACCESS_PUBLIC_KEY: z.string().optional(),
+  MAX_SESSIONS: z
+    .string({
+      message: 'Максимальное количество сессий не установлено',
+    })
+    .regex(/^\d+$/, {
+      message: `Некорректное количество сессий`,
+    })
+    .transform(Number),
   TEST_EMAIL: process.env.NODE_ENV
     ? process.env.NODE_ENV === 'local' ||
       process.env.NODE_ENV === 'test' ||

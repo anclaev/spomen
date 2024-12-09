@@ -1,5 +1,5 @@
 {
-  "name": "@spomen/oauth",
+  "name": "oauth",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/oauth/src",
   "projectType": "application",
@@ -9,10 +9,10 @@
   "copyright": "anclaev",
   "description": " Spomen OAuth service",
   "tags": [
-    "@spomen/auth"
+    "auth"
   ],
   "implicitDependencies": [
-    "@spomen/core"
+    "core"
   ],
   "targets": {
     "build": {
@@ -45,7 +45,7 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "@spomen/oauth:build",
+        "buildTarget": "oauth:build",
         "runBuildTargetDependencies": false,
         "inspect": false
       },
@@ -53,13 +53,13 @@
       "compiler": "tsc",
       "configurations": {
         "development": {
-          "buildTarget": "@spomen/oauth:build:development"
+          "buildTarget": "oauth:build:development"
         },
         "staging": {
-          "buildTarget": "@spomen/oauth:build:staging"
+          "buildTarget": "oauth:build:staging"
         },
         "production": {
-          "buildTarget": "@spomen/oauth:build:production"
+          "buildTarget": "oauth:build:production"
         }
       }
     },

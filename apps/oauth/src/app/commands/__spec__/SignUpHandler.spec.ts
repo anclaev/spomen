@@ -4,12 +4,9 @@ import { v4 } from 'uuid'
 
 import { AccountFactory } from '../../../domain/AccountFactory'
 
-import { OAuthClientRepository } from '../../../infrastructure/repository/OAuthClient.repository'
+import { OAuthClientRepository } from '../../../infrastructure/oauth/OAuthClient.repository'
 import { AccountRepository } from '../../../infrastructure/repository/account.repository'
-import {
-  OAUTH_CLIENT_SCOPES,
-  SIGN_UP_STATUS,
-} from '../../../infrastructure/Enums'
+import { SIGN_UP_STATUS } from '../../../infrastructure/Enums'
 
 import { SignUpHandler } from '../SignUpHandler'
 import { SignUpCommand } from '../SignUpCommand'
@@ -60,7 +57,6 @@ describe('SignUpHandler', () => {
 
     const client = {
       id: v4(),
-      getScopes: jest.fn().mockReturnValue([OAUTH_CLIENT_SCOPES.ROOT]),
     }
 
     factory.create = jest.fn().mockReturnValue(account)
@@ -85,6 +81,5 @@ describe('SignUpHandler', () => {
     expect(accountRepository.create).toBeCalledTimes(1)
     expect(accountRepository.create).toBeCalledWith(account)
     expect(account.commit).toBeCalledTimes(1)
-    expect(client.getScopes).toBeCalledTimes(1)
   })
 })

@@ -4,8 +4,8 @@ import { Inject, Logger } from '@nestjs/common'
 
 import { AccountRepository } from '../../infrastructure/repository/account.repository'
 import { CONFIRM_EMAIL_STATUS, TOKEN_TYPES } from '../../infrastructure/Enums'
+import { IConfirmTokenPayload } from '../../infrastructure/token/Tokens'
 import { TokenService } from '../../infrastructure/token/token.service'
-import { IConfirmToken } from '../../infrastructure/token/Tokens'
 
 import { ConfirmEmailCommand } from './ConfirmEmailCommand'
 
@@ -23,16 +23,16 @@ export class ConfirmEmailHandler
 
   async execute({ dto }: ConfirmEmailCommand): Promise<CONFIRM_EMAIL_STATUS> {
     try {
-      const validatedToken = await this.token.verifyToken<IConfirmToken>(
+      const validatedToken = await this.token.verifyToken<IConfirmTokenPayload>(
         dto.token,
         TOKEN_TYPES.CONFIRMATION
       )
 
-      if (!validatedToken || !validatedToken.account_id) {
+      if (validatedToken instanceof JsonWebTokenError) {
         return CONFIRM_EMAIL_STATUS.INVALID
       }
 
-      const account = await this.account.findById(validatedToken.account_id)
+      const account = await this.account.findById(validatedToken.user.id)
 
       if (!account) {
         return CONFIRM_EMAIL_STATUS.INVALID
@@ -45,7 +45,7 @@ export class ConfirmEmailHandler
       account.confirm()
       account.commit()
 
-      await this.account.update(validatedToken.account_id, account)
+      await this.account.update(validatedToken.user.id, account)
 
       await Logger.log(
         `Аккаунт подтверждён: ${account.getUsername()} (${account.getEmail()})`

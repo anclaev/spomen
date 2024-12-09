@@ -1,5 +1,6 @@
 import { AccountRole, AccountStatus } from '@prisma/client'
 import { AggregateRoot } from '@nestjs/cqrs'
+import argon2 from 'argon2'
 import moment from 'moment'
 
 import { AccountMeta } from '../infrastructure/entities/account.entity'
@@ -39,6 +40,7 @@ export interface IAccount extends AggregateRoot {
   getUsername(): string
   getId(): string
   changeStatus(status: AccountStatus): void
+  verifyPassword(password: string): Promise<boolean>
   confirm(): void
 }
 
@@ -98,6 +100,10 @@ export class Account extends AggregateRoot implements IAccount {
       this.status = 'COMFIRMED'
       this.meta.confirmed_at = moment().toISOString()
     }
+  }
+
+  async verifyPassword(password: string): Promise<boolean> {
+    return argon2.verify(this.password, password)
   }
 
   create(client_id: string) {

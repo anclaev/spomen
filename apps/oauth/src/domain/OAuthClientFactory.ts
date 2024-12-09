@@ -1,14 +1,14 @@
+import { OAuthClientGrantType } from '@prisma/client'
 import { EventPublisher } from '@nestjs/cqrs'
 import { Inject } from '@nestjs/common'
-
-import { OAUTH_CLIENT_SCOPES } from '../infrastructure/Enums'
 
 import { IOAuthClient, OAuthClient, OAuthClientProps } from './OAuthClient'
 
 type CreateOAuthClientOptions = {
   name: string
   domain: string
-  scopes?: OAUTH_CLIENT_SCOPES[]
+  redirect_urls: string[]
+  grants?: OAuthClientGrantType[]
 }
 
 export class OAuthClientFactory {

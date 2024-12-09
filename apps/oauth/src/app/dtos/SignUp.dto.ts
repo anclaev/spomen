@@ -1,9 +1,9 @@
 import { createZodDto } from 'nestjs-zod'
 import { z } from 'zod'
 
-import { IAccount } from '../../domain/Account'
-
 import { SIGN_UP_STATUS } from '../../infrastructure/Enums'
+
+import { IAccount } from '../../domain/Account'
 
 const SignUpSchema = z.object({
   username: z

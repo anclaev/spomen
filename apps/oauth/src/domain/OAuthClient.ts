@@ -1,12 +1,14 @@
+import { OAuthClientGrantType } from '@prisma/client'
 import { AggregateRoot } from '@nestjs/cqrs'
+import argon2 from 'argon2'
 
 import { SessionEntity } from '../infrastructure/entities/session.entity'
-import { OAUTH_CLIENT_SCOPES } from '../infrastructure/Enums'
 
 export type OAuthClientEssentialProps = Readonly<
   Required<{
     name: string
     domain: string
+    redirect_urls: string[]
   }>
 >
 
@@ -14,7 +16,8 @@ export type OAuthClientOptionalProps = Readonly<
   Partial<{
     id: string
     version: number
-    scopes: OAUTH_CLIENT_SCOPES[]
+    secret: string
+    grants: OAuthClientGrantType[]
     created_at: Date
     updated_at: Date
     sessions: SessionEntity[]
@@ -26,7 +29,11 @@ export type OAuthClientProps = OAuthClientEssentialProps &
 
 export interface IOAuthClient extends AggregateRoot {
   getId(): string
-  getScopes(): OAUTH_CLIENT_SCOPES[]
+  setSecret(secret: string): void
+  verifySecret(secret: string): boolean
+  generateSecret(): Promise<string>
+  getGrants(): OAuthClientGrantType[]
+  getRedirectUrls(): string[]
 }
 
 export class OAuthClient extends AggregateRoot implements IOAuthClient {
@@ -34,7 +41,9 @@ export class OAuthClient extends AggregateRoot implements IOAuthClient {
   private version?: number
   private name: string
   private domain: string
-  private scopes?: OAUTH_CLIENT_SCOPES[]
+  private secret: string
+  private redirect_urls: string[]
+  private grants?: OAuthClientGrantType[]
   private readonly sessions?: SessionEntity[]
   private readonly created_at?: Date
   private updated_at?: Date
@@ -49,7 +58,23 @@ export class OAuthClient extends AggregateRoot implements IOAuthClient {
     return this.id
   }
 
-  getScopes(): OAUTH_CLIENT_SCOPES[] {
-    return this.scopes
+  getGrants(): OAuthClientGrantType[] {
+    return this.grants
+  }
+
+  async generateSecret(): Promise<string> {
+    return argon2.hash(`${this.id}-${this.version}-${this.domain}`)
+  }
+
+  setSecret(secret: string) {
+    this.secret = secret
+  }
+
+  verifySecret(secret: string) {
+    return this.secret === secret
+  }
+
+  getRedirectUrls(): string[] {
+    return this.redirect_urls
   }
 }
