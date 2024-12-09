@@ -2,33 +2,59 @@ import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt'
 import { ConfigService } from '@spomen/core'
 import { Injectable } from '@nestjs/common'
 
-import {
-  IAccessTokenPayload,
-  IConfirmTokenPayload,
-  IRefreshTokenPayload,
-} from './Tokens'
+import { GenerateTokenPayload } from './Tokens'
 
-import { TOKEN_TYPES } from '../Enums'
 import { ENV, ISSUER } from '../Config'
+import { TOKEN_TYPES } from '../Enums'
+import moment from 'moment'
+
+interface ITokenService {
+  decodeToken<T>(token: string): Promise<T>
+  generateToken(
+    payload: GenerateTokenPayload,
+    type: TOKEN_TYPES
+  ): Promise<string>
+  verifyToken<T extends object>(token: string, type: TOKEN_TYPES): Promise<T>
+}
 
 @Injectable()
-export class TokenService {
+export class TokenService implements ITokenService {
   constructor(
     private readonly jwt: JwtService,
     private readonly config: ConfigService
   ) {}
 
+  async decodeToken<T>(token: string): Promise<T> {
+    return this.jwt.decode<T>(token)
+  }
+
   async generateToken(
-    payload: IAccessTokenPayload | IRefreshTokenPayload | IConfirmTokenPayload,
+    payload: GenerateTokenPayload,
     type: TOKEN_TYPES
   ): Promise<string> {
     const options: JwtSignOptions = {
       issuer: ISSUER,
-      subject: payload.account_id,
+      subject: payload.user.id,
       algorithm: 'HS256',
     }
 
     switch (type) {
+      case TOKEN_TYPES.AUTHORIZATION_CODE:
+        return await this.jwt.signAsync(
+          {
+            ...payload,
+            expiresAt: moment()
+              .add(Number(this.config.env<ENV>('ACCESS_TOKEN_EXPIRATION')), 's')
+              .toDate(),
+          },
+          {
+            ...options,
+            privateKey: this.config.env<ENV>('ACCESS_PRIVATE_KEY'),
+            algorithm: 'RS256',
+            expiresIn: Number(this.config.env<ENV>('ACCESS_TOKEN_EXPIRATION')),
+          }
+        )
+
       case TOKEN_TYPES.ACCESS:
         return await this.jwt.signAsync(payload, {
           ...options,

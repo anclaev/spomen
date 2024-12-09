@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs'
 import { join } from 'path'
+import { Client, Scope } from 'oauth2-server'
 
 export type RSAKeys = {
   publicKey: string
@@ -17,36 +18,51 @@ export const loadKeys = (): RSAKeys | Error => {
   }
 }
 
-export interface ITokenWithoutPayload {
+export interface IUser {
+  id: string
+  username: string
+  email: string
+}
+
+export interface ITokenBasePayload {
   iat: number
   exp: number
   iss: string
   sub: string
 }
 
-export interface IAccessTokenPayload {
-  client_id: string
-  account_id: string
-  username: string
-  email: string
+export interface ITokenOAuthPayload {
+  client: Client
+  user: IUser
+  scope?: Scope | undefined
 }
 
-export interface IAccessToken
-  extends ITokenWithoutPayload,
-    IAccessTokenPayload {}
+export interface IAuthorizationCodePayload extends ITokenOAuthPayload {
+  redirect_url: string | undefined
+  expiresAt?: Date | undefined
+}
 
-export interface IRefreshTokenPayload extends IAccessTokenPayload {
+export interface IAccessToken extends ITokenBasePayload, ITokenOAuthPayload {}
+
+export interface IRefreshTokenPayload extends ITokenOAuthPayload {
   token_id: string
 }
 
 export interface IRefreshToken
-  extends ITokenWithoutPayload,
+  extends ITokenBasePayload,
     IRefreshTokenPayload {}
 
-export interface IConfirmTokenPayload extends IAccessTokenPayload {
+export interface IConfirmTokenPayload {
   version: number
+  user: IUser
 }
 
 export interface IConfirmToken
-  extends ITokenWithoutPayload,
+  extends ITokenBasePayload,
     IConfirmTokenPayload {}
+
+export type GenerateTokenPayload =
+  | IAuthorizationCodePayload
+  | ITokenOAuthPayload
+  | IRefreshTokenPayload
+  | IConfirmTokenPayload

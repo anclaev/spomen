@@ -10,17 +10,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 
-import { AuthorizationCode, Token } from 'oauth2-server'
 import { ZodSerializerDto } from 'nestjs-zod'
 import { CommandBus } from '@nestjs/cqrs'
-import { of } from 'rxjs'
-
-import {
-  OAuth2Authenticate,
-  OAuth2Authorization,
-  OAuth2RenewToken,
-  OAuth2Token,
-} from '@boyuai/nestjs-oauth2-server'
 
 import { CONFIRM_EMAIL_STATUS, SIGN_UP_STATUS } from '../infrastructure/Enums'
 
@@ -33,8 +24,8 @@ import { ClientIdQueryDto } from '../app/dtos/ClientIdQuery.dto'
 import { SignUpDto, SignUpResult } from '../app/dtos/SignUp.dto'
 import { AccountDto } from '../app/dtos/Account.dto'
 
-@Controller('oauth')
-export class OAuthController {
+@Controller('oauth2')
+export class OAuth2Controller {
   constructor(readonly commandBus: CommandBus) {}
 
   @Post('sign-up')
@@ -86,22 +77,17 @@ export class OAuthController {
   }
 
   @Post('authorize')
-  authorizeClient(
-    @OAuth2Authorization()
-    authorization: AuthorizationCode
-  ) {
-    return of(authorization)
+  authorizeClient() {
+    return true
   }
 
   @Post('token')
-  @OAuth2Authenticate()
-  grantToken(@OAuth2Token() token: Token) {
-    return of(token)
+  grantToken() {
+    return true
   }
 
   @Post('refresh')
-  @OAuth2RenewToken()
-  refreshToken(@OAuth2Token() token: Token) {
-    return of(token)
+  refreshToken() {
+    return true
   }
 }

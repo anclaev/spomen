@@ -4,6 +4,7 @@ import argon2 from 'argon2'
 
 import { OAuthClientRepository } from '../../infrastructure/repository/OAuthClient.repository'
 import { AccountRepository } from '../../infrastructure/repository/account.repository'
+import { SIGN_UP_STATUS } from '../../infrastructure/Enums'
 
 import { AccountFactory } from '../../domain/AccountFactory'
 
@@ -11,7 +12,6 @@ import { InjectionToken } from '../injection-token'
 
 import { SignUpResult } from '../dtos/SignUp.dto'
 import { SignUpCommand } from './SignUpCommand'
-import { OAUTH_CLIENT_SCOPES, SIGN_UP_STATUS } from '../../infrastructure/Enums'
 
 @CommandHandler(SignUpCommand)
 export class SignUpHandler
@@ -30,14 +30,6 @@ export class SignUpHandler
     const client = await this.client.findById(dto.client_id!)
 
     if (!client) {
-      return { status: SIGN_UP_STATUS.FORBIDDEN }
-    }
-
-    const clientAccessed =
-      client.getScopes().includes(OAUTH_CLIENT_SCOPES.ROOT) ||
-      client.getScopes().includes(OAUTH_CLIENT_SCOPES.REGISTER_ACCOUNTS)
-
-    if (!clientAccessed) {
       return { status: SIGN_UP_STATUS.FORBIDDEN }
     }
 

@@ -25,6 +25,14 @@ enum SessionStatus {
   EXPIRED
 }
 
+enum OAuthClientGrantType {
+  AuthorizationCode
+  ClientCredentials
+  Implicit
+  RefreshToken
+  Password
+}
+
 model Account {
   id         String        @id @default(uuid())
   version    Int           @default(0)
@@ -63,7 +71,8 @@ model OAuthClient {
   version Int      @default(0)
   name    String   @unique
   domain  String   @unique
-  scopes  String[] @default([])
+  grants  OAuthClientGrantType[] @default([AuthorizationCode, RefreshToken])
+  redirect_urls String[] @default([])
 
   sessions Session[] @relation("OAuthClientSessions")
 

@@ -1038,11 +1038,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@boyuai/nestjs-oauth2-server@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@boyuai/nestjs-oauth2-server/-/nestjs-oauth2-server-0.1.0.tgz#d0d55580c44384a970a7385c8dfa0c3b6898a529"
-  integrity sha512-jSpSHeWI18pFnUXN2+eUJd8Oos5RyxnZoSEX4oTeAewIq1AOXaj/7ZwrxgZ56W8qJfpQw5ri7FATJAu7orrW1g==
-
 "@bufbuild/protobuf@^2.0.0":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-2.2.2.tgz#1a6d89603fb215dc4d4178052d05b30b83c75402"

@@ -59,11 +59,12 @@ export class EmailService {
 
     const token = await this.token.generateToken(
       {
-        email: dto.email,
-        account_id: dto.account_id,
-        username: dto.username,
         version: account.getVersion(),
-        client_id: dto.client_id,
+        user: {
+          email: dto.email,
+          username: dto.username,
+          id: dto.account_id,
+        },
       },
       TOKEN_TYPES.CONFIRMATION
     )
