@@ -28,7 +28,7 @@ export class ConfirmEmailHandler
         TOKEN_TYPES.CONFIRMATION
       )
 
-      if (!validatedToken || !validatedToken.user.id) {
+      if (validatedToken instanceof JsonWebTokenError) {
         return CONFIRM_EMAIL_STATUS.INVALID
       }
 

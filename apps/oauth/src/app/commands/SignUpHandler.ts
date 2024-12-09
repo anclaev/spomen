@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs'
 import { Inject } from '@nestjs/common'
 import argon2 from 'argon2'
 
-import { OAuthClientRepository } from '../../infrastructure/repository/OAuthClient.repository'
+import { OAuthClientRepository } from '../../infrastructure/oauth/OAuthClient.repository'
 import { AccountRepository } from '../../infrastructure/repository/account.repository'
 import { SIGN_UP_STATUS } from '../../infrastructure/Enums'
 

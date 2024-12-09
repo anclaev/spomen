@@ -1,6 +1,14 @@
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod'
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
-import { Module, Provider } from '@nestjs/common'
+
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  Provider,
+  RequestMethod,
+} from '@nestjs/common'
+
 import { CqrsModule } from '@nestjs/cqrs'
 import { JwtModule } from '@nestjs/jwt'
 
@@ -11,21 +19,27 @@ import {
   SERVICES,
 } from '@spomen/core'
 
-import { OAuthClientRepository } from '../infrastructure/repository/OAuthClient.repository'
+import { OAuthClientRepository } from '../infrastructure/oauth/OAuthClient.repository'
 import { AccountRepository } from '../infrastructure/repository/account.repository'
 import { SessionRepository } from '../infrastructure/repository/session.repository'
-import { OAuth2Module } from '../infrastructure/oauth2/OAuth2.module'
+import { OAuthMiddleware } from '../infrastructure/oauth/OAuth.middleware'
+import { OAuthService } from '../infrastructure/oauth/OAuth.service'
 import { TokenService } from '../infrastructure/token/token.service'
 import { EmailService } from '../infrastructure/email/email.service'
+import { ClientGuard } from '../infrastructure/guard/client.guard'
+import { AuthService } from '../infrastructure/auth/auth.service'
 import { schema } from '../infrastructure/Config'
 
-import { AccountFactory } from '../domain/AccountFactory'
 import { OAuthClientFactory } from '../domain/OAuthClientFactory'
+import { AccountFactory } from '../domain/AccountFactory'
+import { SessionFactory } from '../domain/SessionFactory'
 
 import { ConfirmEmailHandler } from './commands/ConfirmEmailHandler'
 import { SignUpHandler } from './commands/SignUpHandler'
 
 import { AccountRegisteredHandler } from './events/AccountRegisteredHandler'
+
+import { OAuthController } from '../api/OAuth.controller'
 
 import { InjectionToken } from './injection-token'
 
@@ -63,9 +77,18 @@ const infrastructure: Provider[] = [
     provide: InjectionToken.EMAIL_SERVICE,
     useClass: EmailService,
   },
+  {
+    provide: InjectionToken.AUTH_SERVICE,
+    useClass: AuthService,
+  },
+  {
+    provide: InjectionToken.OAUTH_SERVICE,
+    useClass: OAuthService,
+  },
+  ClientGuard,
 ]
 
-const domain = [AccountFactory, OAuthClientFactory]
+const domain = [SessionFactory, AccountFactory, OAuthClientFactory]
 
 const app = [SignUpHandler, AccountRegisteredHandler, ConfirmEmailHandler]
 
@@ -79,8 +102,18 @@ const app = [SignUpHandler, AccountRegisteredHandler, ConfirmEmailHandler]
     JwtModule.register({
       global: true,
     }),
-    OAuth2Module,
   ],
   providers: [...infrastructure, ...domain, ...app],
+  controllers: [OAuthController],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(OAuthMiddleware).forRoutes(
+      { path: '/oauth/authorize', method: RequestMethod.GET },
+      {
+        path: '/oauth/authorize',
+        method: RequestMethod.POST,
+      }
+    )
+  }
+}

@@ -8,7 +8,7 @@ import { InjectionToken } from '../../app/injection-token'
 import { IOAuthClient, OAuthClientProps } from '../../domain/OAuthClient'
 import { OAuthClientFactory } from '../../domain/OAuthClientFactory'
 
-import { OAuthClientEntity } from '../entities/OAuthClient.entity'
+import { OAuthClientEntity } from './OAuthClient.entity'
 
 export interface IOAuthClientRepository {
   create: (client: IOAuthClient) => Promise<IOAuthClient>

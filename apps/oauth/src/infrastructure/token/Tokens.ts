@@ -1,6 +1,8 @@
+import { Client, Scope } from 'oauth2-server'
 import { readFileSync } from 'fs'
 import { join } from 'path'
-import { Client, Scope } from 'oauth2-server'
+
+import { IUser } from '../oauth/OAuth'
 
 export type RSAKeys = {
   publicKey: string
@@ -16,12 +18,6 @@ export const loadKeys = (): RSAKeys | Error => {
   } catch (e) {
     return new Error('RSA-ключи не установлены')
   }
-}
-
-export interface IUser {
-  id: string
-  username: string
-  email: string
 }
 
 export interface ITokenBasePayload {
@@ -40,6 +36,10 @@ export interface ITokenOAuthPayload {
 export interface IAuthorizationCodePayload extends ITokenOAuthPayload {
   redirect_url: string | undefined
   expiresAt?: Date | undefined
+}
+
+export interface IOAuthTokenPayload {
+  user: IUser
 }
 
 export interface IAccessToken extends ITokenBasePayload, ITokenOAuthPayload {}
@@ -66,3 +66,4 @@ export type GenerateTokenPayload =
   | ITokenOAuthPayload
   | IRefreshTokenPayload
   | IConfirmTokenPayload
+  | IOAuthTokenPayload

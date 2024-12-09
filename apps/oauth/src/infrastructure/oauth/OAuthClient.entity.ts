@@ -1,7 +1,7 @@
 import { OAuthClientGrantType } from '@prisma/client'
 import { RootEntity } from '@spomen/core'
 
-import { SessionEntity } from './session.entity'
+import { SessionEntity } from '../entities/session.entity'
 
 export class OAuthClientEntity extends RootEntity {
   name: string

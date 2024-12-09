@@ -6,4 +6,6 @@ export enum InjectionToken {
   TOKEN_SERVICE = 'TokenService',
   MAILER_SERVICE = 'MailerService',
   EMAIL_SERVICE = 'EmailService',
+  AUTH_SERVICE = 'AuthService',
+  OAUTH_SERVICE = 'OAuthService',
 }

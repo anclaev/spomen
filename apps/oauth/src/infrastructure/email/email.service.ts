@@ -9,7 +9,7 @@ import { TEMPLATES, TOKEN_TYPES } from '../Enums'
 import { ENV } from '../Config'
 
 import { SendConfirmEmailType } from '../../app/dtos/SendConfirmEmail.dto'
-import { ClientIdQueryDtoType } from '../../app/dtos/ClientIdQuery.dto'
+import { SignUpQueryDtoType } from '../../app/dtos/SignUpQuery.dto'
 
 import { IAccount } from '../../domain/Account'
 
@@ -44,7 +44,7 @@ export class EmailService {
   }
 
   async sendConfirmationEmail(
-    dto: SendConfirmEmailType & ClientIdQueryDtoType,
+    dto: SendConfirmEmailType & SignUpQueryDtoType,
     alreadyAccount?: IAccount
   ): Promise<boolean | Error> {
     const account =
