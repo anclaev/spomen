@@ -36,6 +36,7 @@ import { SignUpQueryDto } from '../app/dtos/SignUpQuery.dto'
 import { AccountDto } from '../app/dtos/Account.dto'
 
 import { InjectionToken } from '../app/injection-token'
+import { OAuthRefreshQueryDto } from '../app/dtos/OAuthRefreshQuery.dto'
 
 @Controller('oauth')
 export class OAuthController {
@@ -152,6 +153,10 @@ export class OAuthController {
     return this.oauth.authenticateUser(query, req)
   }
 
+  /**
+   * Обработка получения пары токенов
+   * @param {OAuthTokenQueryType} query Параметры OAuth
+   */
   @Get('token')
   @ValidateClient()
   @ZodSerializerDto(OAuthTokenResponseDto)
@@ -159,10 +164,25 @@ export class OAuthController {
     return this.oauth.grantToken(query)
   }
 
+  /**
+   * Обработка получения пары токенов
+   * @param {OAuthTokenQueryType} query Параметры OAuth
+   */
   @Post('token')
   @ValidateClient()
   @ZodSerializerDto(OAuthTokenResponseDto)
   tokenPOST(@Query() query: OAuthTokenQueryDto) {
     return this.oauth.grantToken(query)
+  }
+
+  /**
+   * Обработка обновления токенов
+   * @param query
+   */
+  @Post('refresh')
+  @ValidateClient()
+  @ZodSerializerDto(OAuthTokenResponseDto)
+  refresh(@Query() query: OAuthRefreshQueryDto) {
+    return this.oauth.refresh(query)
   }
 }

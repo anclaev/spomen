@@ -25,6 +25,8 @@ export type SessionOptionalProps = Readonly<
 export type SessionProps = SessionEssentialProps & SessionOptionalProps
 
 export interface ISession extends AggregateRoot {
+  getId(): string
+  getAccountId(): string
   getRefreshToken(): string
   getStatus(): SessionStatus
   getExpiredAt(): Date | null
@@ -48,6 +50,14 @@ export class Session extends AggregateRoot implements ISession {
     super()
     // noinspection TypeScriptValidateTypes
     Object.assign(this, props)
+  }
+
+  getId(): string {
+    return this.id
+  }
+
+  getAccountId(): string {
+    return this.account_id
   }
 
   getRefreshToken(): string {

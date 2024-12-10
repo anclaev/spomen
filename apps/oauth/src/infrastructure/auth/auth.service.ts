@@ -113,6 +113,10 @@ export class AuthService implements IAuthService {
     return await this.account.findById(account_id)
   }
 
+  async findSession(refresh_token: string): Promise<ISession | null> {
+    return await this.session.findByRefreshToken(refresh_token)
+  }
+
   async createSession(
     id,
     refresh_token: string,
@@ -137,6 +141,14 @@ export class AuthService implements IAuthService {
     created.commit()
 
     return created
+  }
+
+  async updateSession(id: string, session: ISession): Promise<ISession | null> {
+    return await this.session.update(id, session)
+  }
+
+  async removeSession(id: string): Promise<boolean> {
+    return await this.session.remove(id)
   }
 
   async validateSessionLimit(
