@@ -13,7 +13,6 @@
     "run-services": "bash scripts/run-services.sh",
     "generate-proto": "bash scripts/generate-proto.sh",
     "merge-schema": "bash scripts/merge-schema.sh",
-    "build:docker": "bash scripts/build.sh",
     "dev": "nx serve",
     "dev:all": "nx run-many -t serve --all --skip-nx-cache",
     "test:all": "nx run-many -t test --all --skip-nx-cache --output-style=stream"
@@ -93,6 +92,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.8.0",
+    "@koliveira15/nx-sonarqube": "4.1.1",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.4.12",
     "@nrwl/workspace": "^19.8.4",
@@ -136,6 +136,7 @@
     "prisma": "^6.0.1",
     "prisma-merge-schema": "^1.0.0",
     "protoc": "^1.1.3",
+    "sonarqube-scanner": "3.1.0",
     "standard-version": "^9.5.0",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",

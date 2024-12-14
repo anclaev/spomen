@@ -3,26 +3,16 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/oauth/src",
   "projectType": "application",
-  "authors": [
-    "Artem Samarin <iahugo@yandex.ru> (https://t.me/anclaev)"
-  ],
+  "authors": ["Artem Samarin <iahugo@yandex.ru> (https://t.me/anclaev)"],
   "copyright": "anclaev",
   "description": " Spomen OAuth service",
-  "tags": [
-    "auth"
-  ],
-  "implicitDependencies": [
-    "core"
-  ],
+  "tags": ["auth"],
+  "implicitDependencies": ["core"],
   "targets": {
     "build": {
       "executor": "@nx/webpack:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "dependsOn": [
-        "prisma-generate"
-      ],
+      "outputs": ["{options.outputPath}"],
+      "dependsOn": ["prisma-generate"],
       "defaultConfiguration": "development",
       "options": {
         "target": "node",
@@ -33,12 +23,9 @@
         "webpackConfig": "apps/oauth/webpack.config.js"
       },
       "configurations": {
-        "development": {
-        },
-        "staging": {
-        },
-        "production": {
-        }
+        "development": {},
+        "staging": {},
+        "production": {}
       }
     },
     "serve": {
@@ -69,66 +56,38 @@
     "container": {
       "executor": "@nx-tools/nx-container:build",
       "defaultConfiguration": "local",
-      "dependsOn": [
-        "build"
-      ],
+      "dependsOn": ["build"],
       "options": {
         "load": true,
         "engine": "docker",
-        "build-args": [
-          "NODE_ENV=local"
-        ]
+        "build-args": ["NODE_ENV=local"]
       },
       "configurations": {
         "local": {
           "push": false,
           "load": true,
-          "build-args": [
-            "NODE_ENV=local"
-          ],
-          "tags": [
-            "anclaev/spomen-oauth:local"
-          ]
+          "build-args": ["NODE_ENV=local"],
+          "tags": ["anclaev/spomen-oauth:local"]
         },
         "development": {
           "push": false,
           "load": true,
-          "build-args": [
-            "NODE_ENV=development"
-          ],
-          "tags": [
-            "anclaev/spomen-oauth:dev"
-          ]
+          "build-args": ["NODE_ENV=development"],
+          "tags": ["anclaev/spomen-oauth:dev"]
         },
         "staging": {
           "push": true,
-          "cache-from": [
-            "type=gha"
-          ],
-          "cache-to": [
-            "type=gha,mode=max"
-          ],
-          "build-args": [
-            "NODE_ENV=staging"
-          ],
-          "tags": [
-            "anclaev/spomen-oauth:staging"
-          ]
+          "cache-from": ["type=gha"],
+          "cache-to": ["type=gha,mode=max"],
+          "build-args": ["NODE_ENV=staging"],
+          "tags": ["anclaev/spomen-oauth:staging"]
         },
         "production": {
           "push": true,
-          "cache-from": [
-            "type=gha"
-          ],
-          "cache-to": [
-            "type=gha,mode=max"
-          ],
-          "build-args": [
-            "NODE_ENV=production"
-          ],
-          "tags": [
-            "anclaev/spomen-oauth:latest"
-          ]
+          "cache-from": ["type=gha"],
+          "cache-to": ["type=gha,mode=max"],
+          "build-args": ["NODE_ENV=production"],
+          "tags": ["anclaev/spomen-oauth:latest"]
         }
       }
     },
@@ -202,6 +161,13 @@
       "executor": "@nx-tools/nx-prisma:validate",
       "options": {
         "schema": "apps/oauth/prisma/schema.prisma"
+      }
+    },
+    "sonar": {
+      "executor": "@koliveira15/nx-sonarqube:scan",
+      "options": {
+        "hostUrl": "https://sonar.anclaev.com",
+        "projectKey": "anclaev_spomen_ee9cae8b-4842-4efa-a1e9-6b49c23b563b"
       }
     }
   }

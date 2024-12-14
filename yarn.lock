@@ -1557,6 +1557,11 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.5.0.tgz#6008e35b9d9d8ee27bc4bfaa70c8cbf33a537b4c"
   integrity sha512-ojoNsrIuPI9g6o8UxhraZQSyF2ByJanAY4cTFbc8Mf2AXEF4aQRGY1dJxyJpuyav8r9FGflEt/Ff3u5Nt6YMPA==
 
+"@koliveira15/nx-sonarqube@4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@koliveira15/nx-sonarqube/-/nx-sonarqube-4.1.1.tgz#d260bbbe2c8d7109f5272c3b82993c69dce6760d"
+  integrity sha512-P37zGP9XsvG0OLJ6k2IeHzxMvwCjTTJy0byXYo3EaBc1XbfvMrnMDyxJwXxd1LB6ZmzS29YtKS8M1BlbAkFDyw==
+
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.5.tgz#4fc56c15c580b9adb7dc3c333a134e540b44bfb1"
@@ -5626,6 +5631,11 @@ color-string@^1.6.0:
     color-name "^1.0.0"
     simple-swizzle "^0.2.2"
 
+color-support@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/color-support/-/color-support-1.1.3.tgz#93834379a1cc9a0c61f82f52f0d04322251bd5a2"
+  integrity sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==
+
 color@^3.1.3:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/color/-/color-3.2.1.tgz#3544dc198caf4490c3ecc9a790b54fe9ff45e164"
@@ -7255,6 +7265,13 @@ external-editor@^3.0.3:
     chardet "^0.7.0"
     iconv-lite "^0.4.24"
     tmp "^0.0.33"
+
+fancy-log@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/fancy-log/-/fancy-log-2.0.0.tgz#cad207b8396d69ae4796d74d17dff5f68b2f7343"
+  integrity sha512-9CzxZbACXMUXW13tS0tI8XsGGmxWzO2DmYrGuBJOJ8k8q2K7hwfJA5qHjuPPe8wtsco33YR9wc+Rlr5wYFvhSA==
+  dependencies:
+    color-support "^1.1.3"
 
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
@@ -10052,6 +10069,11 @@ minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6:
   dependencies:
     minimist "^1.2.6"
 
+mkdirp@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-3.0.1.tgz#e44e4c5607fb279c168241713cc6e0fea9adcb50"
+  integrity sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==
+
 modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
@@ -10182,6 +10204,11 @@ node-domexception@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/node-domexception/-/node-domexception-1.0.0.tgz#6888db46a1f71c0b76b3f7555016b63fe64766e5"
   integrity sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==
+
+node-downloader-helper@^2.1.9:
+  version "2.1.9"
+  resolved "https://registry.yarnpkg.com/node-downloader-helper/-/node-downloader-helper-2.1.9.tgz#a59ee7276b2bf708bbac2cc5872ad28fc7cd1b0e"
+  integrity sha512-FSvAol2Z8UP191sZtsUZwHIN0eGoGue3uEXGdWIH5228e9KH1YHXT7fN8Oa33UGf+FbqGTQg3sJfrRGzmVCaJA==
 
 node-fetch@^2.6.1, node-fetch@^2.6.9:
   version "2.7.0"
@@ -11334,6 +11361,11 @@ process-nextick-args@^2.0.0, process-nextick-args@~2.0.0:
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
 
+progress@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
+  integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
+
 promisify-any@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/promisify-any/-/promisify-any-2.0.1.tgz#403e00a8813f175242ab50fe33a69f8eece47305"
@@ -12117,6 +12149,19 @@ sockjs@^0.3.24:
     faye-websocket "^0.11.3"
     uuid "^8.3.2"
     websocket-driver "^0.7.4"
+
+sonarqube-scanner@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/sonarqube-scanner/-/sonarqube-scanner-3.1.0.tgz#160605685d09a12d3124db2ac9c62954750bbd0a"
+  integrity sha512-7CspErch2pVwFrC9aM7NminyI0+OQmFz0V5IHJtC7FLM0cbKA2MnlsvfGfqZekqxMmxbWcybZ/izou4nQh9nMQ==
+  dependencies:
+    adm-zip "^0.5.10"
+    fancy-log "^2.0.0"
+    https-proxy-agent "^7.0.1"
+    mkdirp "^3.0.1"
+    node-downloader-helper "^2.1.9"
+    progress "^2.0.3"
+    slugify "^1.6.6"
 
 sorted-array-functions@^1.3.0:
   version "1.3.0"
