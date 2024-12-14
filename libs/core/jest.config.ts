@@ -1,5 +1,5 @@
 export default {
-  displayName: '@spomen/core',
+  displayName: 'core',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
