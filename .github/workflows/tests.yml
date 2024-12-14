@@ -47,13 +47,15 @@ jobs:
       - run: yarn merge-schema
 
       - uses: nrwl/nx-set-shas@v3
+
       - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn nx affected --base=$NX_BASE --head=$NX_HEAD -t test --coverage --coverage-reporters=lcov --parallel 1 --skip-nx-cache
         env:
           DATABASE_URL: postgresql://postgres:postgres@posgtres:5432/postgres
+
+      - uses: actions/upload-artifact@v4
         with:
-          artifacts-path: |
-            coverage
-          artifacts-name: coverage-report
+          name: code-coverage-report
+          path: coverage
 
   analyze:
     runs-on: ubuntu-latest
@@ -69,10 +71,9 @@ jobs:
           node-version: 'latest'
           cache: yarn
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
-          name: coverage-report
-          path: coverage
+          name: code-coverage-report
 
       - run: yarn --frozen-lockfile --ignore-scripts
 
