@@ -46,3 +46,6 @@ Thumbs.db
 merged-schema.prisma
 **/keys/*.key
 **/keys/*.pub
+
+# Sonar
+.scannerwork
