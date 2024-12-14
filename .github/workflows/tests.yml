@@ -16,24 +16,8 @@ env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
 jobs:
-  tests-prepare:
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip tests]')"
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 'latest'
-          cache: yarn
-
-      - run: yarn --frozen-lockfile --ignore-scripts
-
   tests:
     runs-on: ubuntu-latest
-    needs: [ tests-prepare ]
     if: "!contains(github.event.head_commit.message, '[skip tests]')"
     services:
       postrges:
@@ -70,6 +54,7 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip analyze]')"
+    needs: [tests]
     steps:
       - uses: actions/checkout@v4
         with:
