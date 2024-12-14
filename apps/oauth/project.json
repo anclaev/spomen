@@ -6,9 +6,7 @@
   "authors": ["Artem Samarin <iahugo@yandex.ru> (https://t.me/anclaev)"],
   "copyright": "anclaev",
   "description": " Spomen OAuth service",
-  "tags": [
-    "oauth"
-  ],
+  "tags": ["oauth"],
   "implicitDependencies": ["core"],
   "targets": {
     "build": {
